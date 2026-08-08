@@ -26,7 +26,7 @@
             --color-red: #ef4444;       /* 🔴 Entrega Legal */
 
             --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            --bg-modal: rgba(7, 10, 19, 0.95);
+            --bg-modal: rgba(7, 10, 19, 0.97);
         }
 
         [data-theme="light"] {
@@ -36,7 +36,7 @@
             --border-color: #cbd5e1;
             --text-primary: #0f172a;
             --text-secondary: #475569;
-            --bg-modal: rgba(240, 244, 248, 0.95);
+            --bg-modal: rgba(240, 244, 248, 0.97);
         }
 
         * {
@@ -46,14 +46,18 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Corta rolagem dupla no nível raiz */
+        }
+
         body {
             font-family: var(--font-family);
             background-color: var(--bg-primary);
             color: var(--text-primary);
-            height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
             transition: background-color 0.25s, color 0.2s;
         }
 
@@ -78,6 +82,7 @@
             justify-content: space-between;
             align-items: center;
             z-index: 10;
+            flex-shrink: 0;
         }
 
         .header-title h1 {
@@ -108,7 +113,7 @@
         }
 
         /* ========================================
-           BARRA DE ABAS INFERIOR (Mobile App Style)
+           BARRA DE ABAS INFERIOR
            ======================================== */
         .tab-nav {
             position: fixed;
@@ -132,9 +137,9 @@
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             cursor: pointer;
-            width: 33.3%;
+            width: 25%;
             height: 100%;
             justify-content: center;
             transition: color 0.2s;
@@ -146,7 +151,7 @@
         }
 
         .tab-icon {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
         }
 
         .tab-content {
@@ -196,7 +201,7 @@
             height: 100%;
         }
 
-        /* Configuração de Cores por criticidade */
+        /* Configuração de Cores Dinâmicas */
         .block-green::before { background-color: var(--color-green); }
         .block-blue::before { background-color: var(--color-blue); }
         .block-yellow::before { background-color: var(--color-yellow); }
@@ -280,6 +285,7 @@
             background-color: var(--bg-input) !important;
             border: 1px solid var(--border-color) !important;
             color: var(--text-primary) !important;
+            cursor: pointer;
         }
 
         .btn-sync-action:hover {
@@ -363,6 +369,85 @@
         }
 
         /* ========================================
+           PAINEL DE CONFIGURAÇÃO DE ROTINAS (CRUD)
+           ======================================== */
+        .routine-creator-panel {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-row label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .form-row input, .form-row select {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            outline: none;
+            font-family: var(--font-family);
+        }
+
+        .routine-editor-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .editor-block-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .editor-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 6px;
+        }
+
+        .editor-tasks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background-color: rgba(0,0,0,0.2);
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .editor-task-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            padding: 4px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.03);
+        }
+
+        /* ========================================
            PAINEL DE ASSINATURA E ENCERRAMENTO
            ======================================== */
         .signature-area {
@@ -411,6 +496,7 @@
         .btn-gold { background-color: var(--color-gold); color: #000; }
         .btn-danger { background-color: #3f1a1a; color: #f87171; border: 1px solid #7f1d1d; }
         .btn-secondary { background-color: var(--border-color); color: var(--text-primary); }
+        .btn-xs { padding: 4px 8px; font-size: 0.7rem; border-radius: 6px; }
 
         .report-view {
             background-color: var(--bg-card);
@@ -534,7 +620,7 @@
          ======================================== -->
     <header>
         <div class="header-title">
-            <h1>Ag_IFE 2.0</h1>
+            <h1>Ag_IFE 4.0</h1>
             <p>Agenda do Especialista de Limpeza pós-obra</p>
         </div>
         <div class="header-actions">
@@ -548,7 +634,7 @@
          ======================================== -->
     <main>
         
-        <!-- ABA 1: LINHA DO TEMPO (TIMELINE) -->
+        <!-- ABA 1: LINHA DO TEMPO (TIMELINE DE TAREFAS ATIVAS) -->
         <section id="tab-timeline" class="tab-content active">
             <div class="timeline-container" id="timelineList">
                 <!-- Construído Dinamicamente por Javascript para herdar localStorage -->
@@ -566,7 +652,48 @@
             </div>
         </section>
 
-        <!-- ABA 3: RELATÓRIO DE ENTREGA & CHECKOUT -->
+        <!-- ABA 3: CONFIGURADOR DINÂMICO DE ROTINAS -->
+        <section id="tab-routines" class="tab-content">
+            <div class="report-view">
+                <h3 style="color: var(--color-gold);">⚙️ Configuração Dinâmica de Rotinas</h3>
+                <p>Cadastre e customize os blocos de horários, cores temáticas de criticidade e alarmes específicos exigidos para cada tipo de obra.</p>
+            </div>
+
+            <!-- Form para Criar Novo Bloco -->
+            <div class="routine-creator-panel">
+                <h4 style="font-size: 0.8rem; color: var(--color-gold); text-transform: uppercase;">Criar Novo Bloco de Tempo</h4>
+                <div class="form-row">
+                    <label for="newBlockTitle">Título do Bloco</label>
+                    <input type="text" id="newBlockTitle" placeholder="Ex: Limpeza de Vidros Externos">
+                </div>
+                <div class="form-row">
+                    <label for="newBlockTime">Vigência (Horário)</label>
+                    <input type="text" id="newBlockTime" placeholder="Ex: 08:30 - 10:00">
+                </div>
+                <div class="form-row">
+                    <label for="newBlockAlarm">Horário do Despertador (HH:MM)</label>
+                    <input type="text" id="newBlockAlarm" placeholder="Ex: 09:30">
+                </div>
+                <div class="form-row">
+                    <label for="newBlockColor">Cor de Criticidade (Código Visual)</label>
+                    <select id="newBlockColor">
+                        <option value="block-green">🟢 Verde (Preparação / FISPQ)</option>
+                        <option value="block-blue">🔵 Azul (Técnica / Nobre)</option>
+                        <option value="block-yellow">🟡 Amarelo (Ergonomia / Intervalo)</option>
+                        <option value="block-orange">🟠 Laranja (Fino / Acabamento)</option>
+                        <option value="block-purple">🟣 Roxo (Patrimônio / Ativos)</option>
+                        <option value="block-red">🔴 Vermelho (Legal / Checklist)</option>
+                    </select>
+                </div>
+                <button class="btn btn-gold" onclick="addNewBlock()" style="margin-top: 8px;">➕ Adicionar Bloco de Rotina</button>
+            </div>
+
+            <div class="routine-editor-list" id="routineEditorList">
+                <!-- Blocos cadastrados carregados dinamicamente para edição interna -->
+            </div>
+        </section>
+
+        <!-- ABA 4: RELATÓRIO DE ENTREGA & CHECKOUT -->
         <section id="tab-checkout" class="tab-content">
             <div class="report-view">
                 <h3 style="color: var(--color-gold);">📊 Auditoria Final Diária</h3>
@@ -644,22 +771,37 @@
                         <li>Em celulares compatíveis, use a opção <strong>"⏰ Despertador"</strong> para abrir diretamente a configuração nativa de alarmes do seu aparelho.</li>
                     </ul>
                 </div>
+
+                <div>
+                    <h3>5. Nova Customização de Rotinas (v4.0)</h3>
+                    <p>Acesse a aba <strong>"⚙️ Rotinas"</strong> para ter total autonomia sobre o planejamento de tarefas. Você pode:</p>
+                    <ul>
+                        <li><strong>Criar novos blocos</strong> preenchendo o formulário superior (defina Título, Horário de Vigência, Horário de Alerta no formato HH:MM e selecione a cor).</li>
+                        <li><strong>Adicionar tarefas específicas</strong> para cada bloco no campo "Escreva uma nova tarefa" dentro dos cartões listados no gerenciador e clicando em <strong>"➕ Add"</strong>. Elas aparecerão instantaneamente na Linha do Tempo.</li>
+                        <li><strong>Excluir blocos inteiros</strong> clicando no botão vermelho <strong>"🗑️ Remover"</strong> ou remover tarefas individuais no ícone de fechar <strong>"✕"</strong> ao lado de cada uma.</li>
+                    </ul>
+                    <p><em>Nota: Toda customização reescreve automaticamente os botões dinâmicos de calendário (iCal) e despertador Android de cada card, sem perdas de funcionalidade.</em></p>
+                </div>
             </div>
         </div>
     </div>
 
   
     <!-- ========================================
-         NAVEGAÇÃO DE ABAS INFERIOR
+         NAVEGAÇÃO DE ABAS INFERIOR (Estilo 4 Abas)
          ======================================== -->
     <nav class="tab-nav">
         <button class="tab-btn active" onclick="switchTab('tab-timeline', this)">
             <span class="tab-icon">🕒</span>
-            <span>Linha do Tempo</span>
+            <span>Linha Tempo</span>
         </button>
         <button class="tab-btn" onclick="switchTab('tab-inventory', this)">
             <span class="tab-icon">📦</span>
-            <span>Ativos & FISPQ</span>
+            <span>Ativos</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('tab-routines', this)">
+            <span class="tab-icon">⚙️</span>
+            <span>Rotinas</span>
         </button>
         <button class="tab-btn" onclick="switchTab('tab-checkout', this)">
             <span class="tab-icon">✍️</span>
@@ -672,7 +814,28 @@
          ======================================== -->
     <script>
         // ========================================
-        // ESTRUTURA DE ESTADO PADRÃO (Ag_IFE v1)
+        // COFRE DE ARMAZENAMENTO SEGURO (Bypass contra erros file://)
+        // ========================================
+        const SafeStorage = {
+            getItem(key) {
+                try {
+                    return localStorage.getItem(key);
+                } catch (e) {
+                    return this._memoryStore[key] || null;
+                }
+            },
+            setItem(key, value) {
+                try {
+                    localStorage.setItem(key, value);
+                } catch (e) {
+                    this._memoryStore[key] = String(value);
+                }
+            },
+            _memoryStore: {}
+        };
+
+        // ========================================
+        // ESTRUTURA DE ESTADO CENTRALIZADO (Ag_IFE v4)
         // ========================================
         let appState = {
             signed: false,
@@ -683,7 +846,624 @@
                 { id: "inv_3", name: "Detergente de Ph Neutro (Bellinzoni)", desc: "Comprovação de FISPQ para mármore.", checked: false },
                 { id: "inv_4", name: "Feltros e Panos de Microfibra de 400g/m²", desc: "Zerar qualquer micro-abrasivo na área.", checked: false }
             ],
-            blocks: [
+            blocks: [] // Carregado dinamicamente
+        };
+
+        // Detecta se o sistema operacional é iOS (iPad, iPhone, iPod)
+        function isIOS() {
+            return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        }
+
+        // ========================================
+        // GERENCIADOR DE ÁUDIO WEB SINTETIZADO
+        // ========================================
+        function triggerBeepAlarm() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                
+                const ctx = new AudioCtx();
+                const playBeep = (time, freq, duration) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(freq, time);
+                    
+                    gain.gain.setValueAtTime(0, time);
+                    gain.gain.linearRampToValueAtTime(0.4, time + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.01, time + duration);
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc.start(time);
+                    osc.stop(time + duration);
+                };
+
+                const now = ctx.currentTime;
+                playBeep(now, 880, 0.3);       
+                playBeep(now + 0.4, 880, 0.3); 
+                playBeep(now + 0.8, 1200, 0.5); 
+                
+            } catch (err) {
+                console.warn("Som bloqueado pelo navegador até o usuário interagir com a tela.", err);
+            }
+        }
+
+        function testSynthAlarm() {
+            triggerBeepAlarm();
+            alert("🔊 Alarme Sintetizado Ag_IFE disparado com sucesso!");
+        }
+
+        // ========================================
+        // INICIALIZAÇÃO E CARREGAMENTO
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            renderTimeline();
+            renderInventory();
+            renderRoutinesEditor();
+            initSignaturePad();
+            startClockCheck();
+        });
+
+        function toggleGuide() {
+            const overlay = document.getElementById('guideOverlay');
+            overlay.classList.toggle('active');
+        }
+
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+
+            if (tabId === 'tab-checkout') {
+                updateReportSummary();
+                resizeCanvas();
+            }
+            if (tabId === 'tab-routines') {
+                renderRoutinesEditor();
+            }
+        }
+
+        // ========================================
+        // LINHA DO TEMPO (CONSTRUÇÃO REATIVA)
+        // ========================================
+        function renderTimeline() {
+            const container = document.getElementById('timelineList');
+            container.innerHTML = '';
+
+            const isAppleDevice = isIOS();
+
+            if (appState.blocks.length === 0) {
+                container.innerHTML = `
+                    <div class="report-view" style="text-align:center; padding:32px 16px;">
+                        <span style="font-size:2rem;">⚙️</span>
+                        <p style="margin-top:8px; color:var(--text-secondary);">Nenhuma rotina configurada para hoje. Acesse a aba "Rotinas" acima para criar seus blocos de trabalho.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            appState.blocks.forEach((block, bIdx) => {
+                const blockDiv = document.createElement('div');
+                blockDiv.className = `time-block ${block.colorClass}`;
+
+                // Lista de Checkboxes
+                let tasksHtml = '';
+                block.tasks.forEach((task, tIdx) => {
+                    tasksHtml += `
+                        <label class="task-item">
+                            <input type="checkbox" ${task.checked ? 'checked' : ''} onchange="toggleTask(${bIdx}, ${tIdx})">
+                            <span>${escapeHtml(task.text)}</span>
+                        </label>
+                    `;
+                });
+
+                const photoSrcHtml = block.photoData ? `<img src="${block.photoData}">` : '📷';
+
+                // Botão de Intent Android (ocultado no iOS)
+                const androidAlarmButton = !isAppleDevice ? 
+                    `<button class="btn btn-sync-action" onclick="launchAndroidAlarm(${bIdx})" title="Configurar alarme nativo no Android">⏰ Despertador (Android)</button>` : '';
+
+                blockDiv.innerHTML = `
+                    <div class="block-header">
+                        <div class="block-meta">
+                            <span class="block-title">${escapeHtml(block.title)}</span>
+                            <span class="block-time">🕒 Horário: ${block.time}</span>
+                        </div>
+                        <span class="block-alarm-badge">🔔 Alerta: ${block.alarmTime}</span>
+                    </div>
+
+                    <div class="task-list">
+                        <strong style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Checklist de Campo:</strong>
+                        ${tasksHtml || '<span style="color:var(--text-secondary); font-size:0.75rem;">Nenhuma tarefa cadastrada.</span>'}
+                    </div>
+
+                    <div class="block-native-sync">
+                        <strong style="font-size:0.7rem; color:var(--text-secondary); width:100%; text-transform:uppercase; margin-bottom:2px;">Prevenção (Despertador Físico Opcional):</strong>
+                        <button class="btn btn-sync-action" onclick="downloadIcalEvent(${bIdx})" title="Adicionar lembrete no calendário do celular">📅 Agenda Celular (iCal)</button>
+                        ${androidAlarmButton}
+                    </div>
+
+                    <div class="photo-area">
+                        <div class="photo-preview" id="preview-${block.id}">
+                            ${photoSrcHtml}
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:4px; flex:1;">
+                            <span style="font-size:0.7rem; color:var(--text-secondary); font-weight:bold;">Registro Fotográfico (Controle de Danos)</span>
+                            <label class="btn-upload" style="align-self: flex-start;">
+                                Carregar Imagem
+                                <input type="file" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event, ${bIdx})">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="display: flex; flex-direction:column; gap:4px;">
+                        <label style="font-size:0.7rem; color:var(--text-secondary); font-weight:bold; text-transform:uppercase;">Anotações de Ocorrência:</label>
+                        <input type="text" class="in-desc" value="${escapeHtml(block.notes)}" placeholder="Ex: Risco encontrado no vidro..." oninput="updateNotes(${bIdx}, this.value)" style="background-color: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); padding:8px; border-radius:6px; font-size:0.8rem; outline:none; font-family: var(--font-family);">
+                    </div>
+                `;
+
+                container.appendChild(blockDiv);
+            });
+        }
+
+        // ========================================
+        // ENGENHARIA DE EXPORTAÇÃO DE ALARMES NATIVOS
+        // ========================================
+        function downloadIcalEvent(bIdx) {
+            const block = appState.blocks[bIdx];
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            
+            const [hour, minute] = block.alarmTime.split(':');
+            const startStr = `${year}${month}${day}T${hour}${minute}00`;
+            const endStr = `${year}${month}${day}T${hour}${String(parseInt(minute) + 15).padStart(2, '0')}00`; 
+
+            const icsContent = [
+                "BEGIN:VCALENDAR",
+                "VERSION:2.0",
+                "PRODID:-//Ag_IFE//Smart Agenda Pós-Obra//BR",
+                "BEGIN:VEVENT",
+                `UID:event_${block.id}_${Date.now()}@ag_ife.app`,
+                `DTSTAMP:${year}${month}${day}T000000Z`,
+                `DTSTART:${startStr}`,
+                `DTEND:${endStr}`,
+                `SUMMARY:Ag_IFE: ${block.title}`,
+                `DESCRIPTION:Ação de engenharia pós-obra. Valide os checklists no app.`,
+                "BEGIN:VALARM",
+                "TRIGGER:-PT0M", 
+                "ACTION:DISPLAY",
+                "DESCRIPTION:Lembrete de Alerta Crítico Ag_IFE",
+                "END:VALARM",
+                "END:VEVENT",
+                "END:VCALENDAR"
+            ].join("\r\n");
+
+            const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.href = url;
+            downloadAnchor.download = `Alerta_Ag_IFE_${block.id}.ics`;
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            document.body.removeChild(downloadAnchor);
+            URL.revokeObjectURL(url);
+        }
+
+        function launchAndroidAlarm(bIdx) {
+            const block = appState.blocks[bIdx];
+            const [hour, minute] = block.alarmTime.split(':');
+            const message = encodeURIComponent(`Ag_IFE: ${block.title}`);
+            const intentUrl = `intent:#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR=${parseInt(hour)};i.android.intent.extra.alarm.MINUTES=${parseInt(minute)};S.android.intent.extra.alarm.MESSAGE=${message};S.android.intent.extra.alarm.SKIP_UI=false;end`;
+            window.location.href = intentUrl;
+        }
+
+        // ========================================
+        // CONTROLES DE CHECKLIST & FOTO
+        // ========================================
+        function toggleTask(bIdx, tIdx) {
+            appState.blocks[bIdx].tasks[tIdx].checked = !appState.blocks[bIdx].tasks[tIdx].checked;
+            saveStateToStorage();
+        }
+
+        function updateNotes(bIdx, text) {
+            appState.blocks[bIdx].notes = text;
+            saveStateToStorage();
+        }
+
+        function handlePhotoUpload(event, bIdx) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                appState.blocks[bIdx].photoData = base64;
+                saveStateToStorage();
+                
+                const preview = document.getElementById(`preview-${appState.blocks[bIdx].id}`);
+                preview.innerHTML = `<img src="${base64}">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ========================================
+        // GESTÃO DINÂMICA DE ROTINAS (CRUD VS4)
+        // ========================================
+        function renderRoutinesEditor() {
+            const container = document.getElementById('routineEditorList');
+            container.innerHTML = '';
+
+            if (appState.blocks.length === 0) {
+                container.innerHTML = `
+                    <p style="text-align:center; font-size:0.75rem; color:var(--text-secondary); margin-top:12px;">Crie seu primeiro bloco usando o formulário acima.</p>
+                `;
+                return;
+            }
+
+            appState.blocks.forEach((block, bIdx) => {
+                const card = document.createElement('div');
+                card.className = 'editor-block-card';
+
+                // Renderiza sub-lista de tarefas para exclusão individual
+                let tasksHtml = '';
+                block.tasks.forEach((task, tIdx) => {
+                    tasksHtml += `
+                        <div class="editor-task-row">
+                            <span>- ${escapeHtml(task.text)}</span>
+                            <button class="btn btn-secondary btn-xs" onclick="removeTaskFromBlock(${bIdx}, ${tIdx})" style="color:var(--color-red); border-color: rgba(239, 68, 68, 0.2);">✕</button>
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="editor-block-header">
+                        <div>
+                            <strong style="font-size:0.85rem;">${escapeHtml(block.title)}</strong>
+                            <div style="font-size:0.7rem; color:var(--text-secondary);">${block.time} | Alarme: ${block.alarmTime}</div>
+                        </div>
+                        <button class="btn btn-danger btn-xs" onclick="removeBlock(${bIdx})">🗑️ Remover</button>
+                    </div>
+
+                    <div class="editor-tasks-container">
+                        <strong style="font-size:0.7rem; color:var(--text-secondary); text-transform:uppercase;">Checklist das Atividades:</strong>
+                        ${tasksHtml || '<span style="font-size:0.7rem; color:var(--text-secondary);">Nenhuma tarefa adicionada.</span>'}
+                        
+                        <div class="form-row" style="flex-direction:row; gap:4px; margin-top:6px;">
+                            <input type="text" id="taskInput-${block.id}" placeholder="Escreva uma nova tarefa..." style="flex:1; padding:6px; font-size:0.75rem;">
+                            <button class="btn btn-gold btn-xs" onclick="addTaskToBlock(${bIdx})">➕ Add</button>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function addNewBlock() {
+            const titleInput = document.getElementById('newBlockTitle');
+            const timeInput = document.getElementById('newBlockTime');
+            const alarmInput = document.getElementById('newBlockAlarm');
+            const colorInput = document.getElementById('newBlockColor');
+
+            const title = titleInput.value.trim();
+            const time = timeInput.value.trim();
+            const alarm = alarmInput.value.trim();
+            const colorClass = colorInput.value;
+
+            if (!title || !time || !alarm) {
+                alert("Por favor, preencha todos os campos para criar o bloco.");
+                return;
+            }
+
+            const timePattern = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+            if (!timePattern.test(alarm)) {
+                alert("O horário de despertador deve estar no formato de relógio válido de 24h (HH:MM). Ex: 07:30");
+                return;
+            }
+
+            const newBlock = {
+                id: 'block_' + Date.now(),
+                title: title,
+                time: time,
+                colorClass: colorClass,
+                alarmTime: alarm,
+                alarmTriggered: false,
+                tasks: [],
+                photoData: null,
+                notes: ""
+            };
+
+            appState.blocks.push(newBlock);
+            saveStateToStorage();
+            
+            titleInput.value = '';
+            timeInput.value = '';
+            alarmInput.value = '';
+
+            renderRoutinesEditor();
+            renderTimeline();
+            alert("✅ Bloco de Rotina adicionado com sucesso!");
+        }
+
+        // REMOÇÃO SEGURA DE BLOCOS DA LISTA
+        function removeBlock(bIdx) {
+            if (confirm("Deseja mesmo excluir esta rotina inteira e suas tarefas associadas?")) {
+                appState.blocks.splice(bIdx, 1);
+                saveStateToStorage();
+                renderRoutinesEditor();
+                renderTimeline();
+            }
+        }
+
+        function addTaskToBlock(bIdx) {
+            const block = appState.blocks[bIdx];
+            const input = document.getElementById(`taskInput-${block.id}`);
+            const text = input.value.trim();
+
+            if (!text) {
+                alert("Por favor, escreva a descrição da atividade.");
+                return;
+            }
+
+            block.tasks.push({ text: text, checked: false });
+            saveStateToStorage();
+            input.value = '';
+
+            renderRoutinesEditor();
+            renderTimeline();
+        }
+
+        function removeTaskFromBlock(bIdx, tIdx) {
+            appState.blocks[bIdx].tasks.splice(tIdx, 1);
+            saveStateToStorage();
+            renderRoutinesEditor();
+            renderTimeline();
+        }
+
+        // ========================================
+        // ABA INVENTÁRIO
+        // ========================================
+        function renderInventory() {
+            const container = document.getElementById('inventoryList');
+            container.innerHTML = '';
+
+            appState.inventory.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'inventory-card';
+
+                div.innerHTML = `
+                    <div class="inventory-info">
+                        <span class="inventory-name">${escapeHtml(item.name)}</span>
+                        <span class="inventory-desc">${escapeHtml(item.desc)}</span>
+                    </div>
+                    <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleInventory(${idx})" style="width:18px; height:18px; accent-color:var(--color-gold); cursor:pointer;">
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function toggleInventory(idx) {
+            appState.inventory[idx].checked = !appState.inventory[idx].checked;
+            saveStateToStorage();
+        }
+
+        // ========================================
+        // ENGINE DE RELÓGIO E DISPARO DE ALERTAS
+        // ========================================
+        function startClockCheck() {
+            setInterval(() => {
+                const now = new Date();
+                const curTimeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                
+                appState.blocks.forEach(block => {
+                    if (block.alarmTime === curTimeStr && !block.alarmTriggered) {
+                        block.alarmTriggered = true;
+                        triggerBeepAlarm();
+                        saveStateToStorage();
+                        alert(`🔔 ALARME DE CRITICIDADE - Ag_IFE:\n\nHora: ${block.alarmTime}\nBloco: ${block.title}\n\nVerifique as obrigações deste período.`);
+                    }
+                    
+                    if (curTimeStr === "00:00") {
+                        block.alarmTriggered = false;
+                    }
+                });
+            }, 30000); 
+        }
+
+        // ========================================
+        // CANVAS: PAD DE ASSINATURA ELETRÔNICA
+        // ========================================
+        let canvas, ctx, isDrawing = false;
+
+        function initSignaturePad() {
+            canvas = document.getElementById('signatureCanvas');
+            ctx = canvas.getContext('2d');
+            
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw);
+            canvas.addEventListener('mouseleave', stopDraw);
+
+            canvas.addEventListener('touchstart', startDrawTouch, {passive: false});
+            canvas.addEventListener('touchmove', drawTouch, {passive: false});
+            canvas.addEventListener('touchend', stopDraw);
+
+            window.addEventListener('resize', resizeCanvas);
+            
+            if (appState.signatureData) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = appState.signatureData;
+            }
+        }
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            
+            if (appState.signatureData) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = appState.signatureData;
+            } else {
+                clearSignature();
+            }
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+
+        function getTouchPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: e.touches[0].clientX - rect.left,
+                y: e.touches[0].clientY - rect.top
+            };
+        }
+
+        function startDraw(e) {
+            isDrawing = true;
+            const pos = getMousePos(e);
+            ctx.beginPath();
+            ctx.strokeStyle = '#fbbf24'; 
+            ctx.lineWidth = 2;
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getMousePos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function startDrawTouch(e) {
+            e.preventDefault();
+            isDrawing = true;
+            const pos = getTouchPos(e);
+            ctx.beginPath();
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function drawTouch(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const pos = getTouchPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDraw() {
+            isDrawing = false;
+        }
+
+        // ========================================
+        // GERADOR DE RELATÓRIO TÉCNICO DIÁRIO
+        // ========================================
+        function updateReportSummary() {
+            const summary = document.getElementById('reportSummary');
+            let tasksCompleted = 0;
+            let tasksTotal = 0;
+
+            appState.blocks.forEach(b => {
+                b.tasks.forEach(t => {
+                    tasksTotal++;
+                    if (t.checked) tasksCompleted++;
+                });
+            });
+
+            let activeEquipments = appState.inventory.filter(i => i.checked).map(i => i.name).join(', ') || 'Nenhum ativado';
+
+            let occurrencesText = '';
+            appState.blocks.forEach(b => {
+                if (b.notes) {
+                    occurrencesText += `\n* Bloco: ${b.title}: ${b.notes}`;
+                }
+            });
+
+            summary.innerHTML = `
+DIÁRIO DE OBRAS TECNICO - FCI/Ag_IFE
+-----------------------------------------
+Data da Auditoria: ${new Date().toLocaleDateString('pt-BR')}
+Executante: Especialista em Entrega de Obras
+Aproveitamento: ${tasksCompleted} de ${tasksTotal} tarefas executadas.
+Equipamentos Ativos: ${activeEquipments}
+Ocorrências em Campo: ${occurrencesText || 'Nenhuma anormalidade registrada.'}
+Assinatura Digital Ativa: ${appState.signed ? 'CONFORMIDADE ASSINADA' : 'PENDENTE DE TRAÇO'}
+-----------------------------------------
+            `;
+        }
+
+        function exportDailyReportText() {
+            updateReportSummary();
+            const text = document.getElementById('reportSummary').textContent;
+            
+            try {
+                const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(text);
+                const downloadAnchor = document.createElement('a');
+                downloadAnchor.setAttribute("href", dataStr);
+                downloadAnchor.setAttribute("download", `Ag_IFE_Relatorio_Diario_${Date.now()}.txt`);
+                document.body.appendChild(downloadAnchor);
+                downloadAnchor.click();
+                downloadAnchor.remove();
+            } catch (err) {
+                alert("Erro ao exportar arquivo de texto.");
+            }
+        }
+
+        // ========================================
+        // PERSISTÊNCIA DE DADOS (LOCAL STORAGE SEGURO)
+        // ========================================
+        function saveStateToStorage() {
+            SafeStorage.setItem('ag_ife_data_v4', JSON.stringify(appState));
+        }
+
+        function loadState() {
+            const saved = SafeStorage.getItem('ag_ife_data_v4');
+            if (saved) {
+                try {
+                    appState = JSON.parse(saved);
+                } catch(e) {
+                    loadDefaultData();
+                }
+            } else {
+                loadDefaultData();
+            }
+        }
+
+        function loadDefaultData() {
+            appState.signed = false;
+            appState.signatureData = null;
+            appState.inventory = [
+                { id: "inv_1", name: "Politriz Rotativa Bosch 1200W", desc: "Verificar integridade do disco de feltro mole.", checked: false },
+                { id: "inv_2", name: "Aspirador de Micropartículas HEPA", desc: "Checar se o saco coletor está vazio.", checked: false },
+                { id: "inv_3", name: "Detergente de Ph Neutro (Bellinzoni)", desc: "Comprovação de FISPQ para mármore.", checked: false },
+                { id: "inv_4", name: "Feltros e Panos de Microfibra de 400g/m²", desc: "Zerar qualquer micro-abrasivo na área.", checked: false }
+            ];
+            
+            appState.blocks = [
                 {
                     id: "block_1",
                     title: "Preparação, Segurança e FISPQ",
@@ -772,503 +1552,13 @@
                     photoData: null,
                     notes: ""
                 }
-            ]
-        };
-
-        // Detecta se o sistema operacional é iOS (iPad, iPhone, iPod)
-        function isIOS() {
-            return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        }
-
-        // ========================================
-        // GERENCIADOR DE ÁUDIO WEB SINTETIZADO (Alarme offline robusto)
-        // ========================================
-        function triggerBeepAlarm() {
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (!AudioCtx) return;
-                
-                const ctx = new AudioCtx();
-                
-                // Beep triplo ritmado de alta engenharia
-                const playBeep = (time, freq, duration) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    
-                    osc.type = "sine";
-                    osc.frequency.setValueAtTime(freq, time);
-                    
-                    gain.gain.setValueAtTime(0, time);
-                    gain.gain.linearRampToValueAtTime(0.4, time + 0.05);
-                    gain.gain.exponentialRampToValueAtTime(0.01, time + duration);
-                    
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    
-                    osc.start(time);
-                    osc.stop(time + duration);
-                };
-
-                const now = ctx.currentTime;
-                playBeep(now, 880, 0.3);       // Alerta 1
-                playBeep(now + 0.4, 880, 0.3); // Alerta 2
-                playBeep(now + 0.8, 1200, 0.5); // Alerta 3 (Mais agudo para atenção)
-                
-            } catch (err) {
-                console.warn("Som bloqueado pelo navegador até o usuário clicar na tela.", err);
-            }
-        }
-
-        function testSynthAlarm() {
-            triggerBeepAlarm();
-            alert("🔊 Alarme Sintetizado Ag_IFE disparado com sucesso!");
-        }
-
-        // ========================================
-        // INICIALIZAÇÃO E CARREGAMENTO
-        // ========================================
-        document.addEventListener('DOMContentLoaded', () => {
-            loadState();
-            renderTimeline();
-            renderInventory();
-            initSignaturePad();
-            startClockCheck();
-        });
-
-        // ========================================
-        // EXIBIÇÃO / OCULTAÇÃO DO GUIA DE INSTRUÇÃO
-        // ========================================
-        function toggleGuide() {
-            const overlay = document.getElementById('guideOverlay');
-            overlay.classList.toggle('active');
-        }
-
-        // ========================================
-        // NAVEGAÇÃO DE ABAS
-        // ========================================
-        function switchTab(tabId, element) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-            document.getElementById(tabId).classList.add('active');
-            element.classList.add('active');
-
-            if (tabId === 'tab-checkout') {
-                updateReportSummary();
-                resizeCanvas();
-            }
-        }
-
-        // ========================================
-        // LINHA DO TEMPO (CONSTRUÇÃO DINÂMICA)
-        // ========================================
-        function renderTimeline() {
-            const container = document.getElementById('timelineList');
-            container.innerHTML = '';
-
-            const isAppleDevice = isIOS();
-
-            appState.blocks.forEach((block, bIdx) => {
-                const blockDiv = document.createElement('div');
-                blockDiv.className = `time-block ${block.colorClass}`;
-
-                // Lista de Checkboxes
-                let tasksHtml = '';
-                block.tasks.forEach((task, tIdx) => {
-                    tasksHtml += `
-                        <label class="task-item">
-                            <input type="checkbox" ${task.checked ? 'checked' : ''} onchange="toggleTask(${bIdx}, ${tIdx})">
-                            <span>${escapeHtml(task.text)}</span>
-                        </label>
-                    `;
-                });
-
-                // Área de Foto com visualizador offline em Base64
-                const photoSrcHtml = block.photoData ? `<img src="${block.photoData}">` : '📷';
-
-                // Botão do despertador nativo (ocultado no iOS)
-                const androidAlarmButton = !isAppleDevice ? 
-                    `<button class="btn btn-sync-action" onclick="launchAndroidAlarm(${bIdx})" title="Configurar alarme nativo no Android">⏰ Despertador (Android)</button>` : '';
-
-                blockDiv.innerHTML = `
-                    <div class="block-header">
-                        <div class="block-meta">
-                            <span class="block-title">${escapeHtml(block.title)}</span>
-                            <span class="block-time">🕒 Horário: ${block.time}</span>
-                        </div>
-                        <span class="block-alarm-badge">🔔 Alerta: ${block.alarmTime}</span>
-                    </div>
-
-                    <div class="task-list">
-                        <strong style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Checklist de Campo:</strong>
-                        ${tasksHtml}
-                    </div>
-
-                    <div class="block-native-sync">
-                        <strong style="font-size:0.7rem; color:var(--text-secondary); width:100%; text-transform:uppercase; margin-bottom:2px;">Prevenção (Despertador Físico Opcional):</strong>
-                        <button class="btn btn-sync-action" onclick="downloadIcalEvent(${bIdx})" title="Adicionar lembrete no calendário do celular">📅 Agenda Celular (iCal)</button>
-                        ${androidAlarmButton}
-                    </div>
-
-                    <div class="photo-area">
-                        <div class="photo-preview" id="preview-${block.id}">
-                            ${photoSrcHtml}
-                        </div>
-                        <div style="display:flex; flex-direction:column; gap:4px; flex:1;">
-                            <span style="font-size:0.7rem; color:var(--text-secondary); font-weight:bold;">Registro Fotográfico (Controle de Danos)</span>
-                            <label class="btn-upload" style="align-self: flex-start;">
-                                Carregar Imagem
-                                <input type="file" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event, ${bIdx})">
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-row" style="display: flex; flex-direction:column; gap:4px;">
-                        <label style="font-size:0.7rem; color:var(--text-secondary); font-weight:bold; text-transform:uppercase;">Anotações de Ocorrência:</label>
-                        <input type="text" class="in-desc" value="${escapeHtml(block.notes)}" placeholder="Ex: Risco encontrado no vidro..." oninput="updateNotes(${bIdx}, this.value)" style="background-color: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); padding:8px; border-radius:6px; font-size:0.8rem; outline:none; font-family: var(--font-family);">
-                    </div>
-                `;
-
-                container.appendChild(blockDiv);
-            });
-        }
-
-        // ========================================
-        // ENGENHARIA DE EXPORTAÇÃO DE ALARMES NATIVOS (OPCIONAL)
-        // ========================================
-        function downloadIcalEvent(bIdx) {
-            const block = appState.blocks[bIdx];
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            
-            // Extrai hora e minuto do alarme configurado
-            const [hour, minute] = block.alarmTime.split(':');
-            const startStr = `${year}${month}${day}T${hour}${minute}00`;
-            const endStr = `${year}${month}${day}T${hour}${String(parseInt(minute) + 15).padStart(2, '0')}00`; // Bloco estimado em 15 minutos
-
-            // String estruturada RFC 5545 para iCalendar
-            const icsContent = [
-                "BEGIN:VCALENDAR",
-                "VERSION:2.0",
-                "PRODID:-//Ag_IFE//Smart Agenda Pós-Obra//BR",
-                "BEGIN:VEVENT",
-                `UID:event_${block.id}_${Date.now()}@ag_ife.app`,
-                `DTSTAMP:${year}${month}${day}T000000Z`,
-                `DTSTART:${startStr}`,
-                `DTEND:${endStr}`,
-                `SUMMARY:Ag_IFE: ${block.title}`,
-                `DESCRIPTION:Ação crítica de engenharia pós-obra. Valide os checklists no app.`,
-                "BEGIN:VALARM",
-                "TRIGGER:-PT0M", // Dispara exatamente na hora do início do evento
-                "ACTION:DISPLAY",
-                "DESCRIPTION:Lembrete de Alerta Crítico Ag_IFE",
-                "END:VALARM",
-                "END:VEVENT",
-                "END:VCALENDAR"
-            ].join("\r\n");
-
-            // Cria blob de download offline sem dependência de internet externa
-            const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
-            const url = URL.createObjectURL(blob);
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.href = url;
-            downloadAnchor.download = `Alerta_Ag_IFE_${block.id}.ics`;
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            document.body.removeChild(downloadAnchor);
-            URL.revokeObjectURL(url);
-        }
-
-        function launchAndroidAlarm(bIdx) {
-            const block = appState.blocks[bIdx];
-            const [hour, minute] = block.alarmTime.split(':');
-            const message = encodeURIComponent(`Ag_IFE: ${block.title}`);
-            
-            // Intent URL para acionar o despertador do Android com horário pré-carregado
-            const intentUrl = `intent:#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR=${parseInt(hour)};i.android.intent.extra.alarm.MINUTES=${parseInt(minute)};S.android.intent.extra.alarm.MESSAGE=${message};S.android.intent.extra.alarm.SKIP_UI=false;end`;
-            window.location.href = intentUrl;
-        }
-
-        // ========================================
-        // CONTROLES DE CHECKLIST & FOTO
-        // ========================================
-        function toggleTask(bIdx, tIdx) {
-            appState.blocks[bIdx].tasks[tIdx].checked = !appState.blocks[bIdx].tasks[tIdx].checked;
+            ];
             saveStateToStorage();
-        }
-
-        function updateNotes(bIdx, text) {
-            appState.blocks[bIdx].notes = text;
-            saveStateToStorage();
-        }
-
-        function handlePhotoUpload(event, bIdx) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64 = e.target.result;
-                appState.blocks[bIdx].photoData = base64;
-                saveStateToStorage();
-                
-                // Atualiza visualizador local na hora
-                const preview = document.getElementById(`preview-${appState.blocks[bIdx].id}`);
-                preview.innerHTML = `<img src="${base64}">`;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // ========================================
-        // ABA INVENTÁRIO
-        // ========================================
-        function renderInventory() {
-            const container = document.getElementById('inventoryList');
-            container.innerHTML = '';
-
-            appState.inventory.forEach((item, idx) => {
-                const div = document.createElement('div');
-                div.className = 'inventory-card';
-
-                div.innerHTML = `
-                    <div class="inventory-info">
-                        <span class="inventory-name">${escapeHtml(item.name)}</span>
-                        <span class="inventory-desc">${escapeHtml(item.desc)}</span>
-                    </div>
-                    <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleInventory(${idx})" style="width:18px; height:18px; accent-color:var(--color-gold); cursor:pointer;">
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function toggleInventory(idx) {
-            appState.inventory[idx].checked = !appState.inventory[idx].checked;
-            saveStateToStorage();
-        }
-
-        // ========================================
-        // ENGINE DE RELÓGIO E DISPARO DE ALERTAS
-        // ========================================
-        function startClockCheck() {
-            setInterval(() => {
-                const now = new Date();
-                const curTimeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-                
-                appState.blocks.forEach(block => {
-                    if (block.alarmTime === curTimeStr && !block.alarmTriggered) {
-                        block.alarmTriggered = true;
-                        triggerBeepAlarm();
-                        saveStateToStorage();
-                        alert(`🔔 ALARME DE CRITICIDADE - Ag_IFE:\n\nHora: ${block.alarmTime}\nBloco: ${block.title}\n\nVerifique as obrigações deste período.`);
-                    }
-                    
-                    // Reseta gatilho se o horário já passou para rearmar pro próximo dia
-                    if (curTimeStr === "00:00") {
-                        block.alarmTriggered = false;
-                    }
-                });
-            }, 30000); // Roda a cada 30 segundos
-        }
-
-        // ========================================
-        // CANVAS: PAD DE ASSINATURA ELETRÔNICA
-        // ========================================
-        let canvas, ctx, isDrawing = false;
-
-        function initSignaturePad() {
-            canvas = document.getElementById('signatureCanvas');
-            ctx = canvas.getContext('2d');
-            
-            // Tratamento de desenho por toque e mouse
-            canvas.addEventListener('mousedown', startDraw);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDraw);
-            canvas.addEventListener('mouseleave', stopDraw);
-
-            canvas.addEventListener('touchstart', startDrawTouch, {passive: false});
-            canvas.addEventListener('touchmove', drawTouch, {passive: false});
-            canvas.addEventListener('touchend', stopDraw);
-
-            window.addEventListener('resize', resizeCanvas);
-            
-            // Recupera assinatura anterior se existir
-            if (appState.signatureData) {
-                const img = new Image();
-                img.onload = function() {
-                    ctx.drawImage(img, 0, 0);
-                };
-                img.src = appState.signatureData;
-            }
-        }
-
-        function resizeCanvas() {
-            if (!canvas) return;
-            const rect = canvas.getBoundingClientRect();
-            // Mantém os pixels internos alinhados com o layout CSS do celular
-            canvas.width = rect.width;
-            canvas.height = rect.height;
-            
-            // Re-renderiza o traço após o redimensionamento se houver
-            if (appState.signatureData) {
-                const img = new Image();
-                img.onload = function() {
-                    ctx.drawImage(img, 0, 0);
-                };
-                img.src = appState.signatureData;
-            } else {
-                clearSignature();
-            }
-        }
-
-        function getMousePos(e) {
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
-            };
-        }
-
-        function getTouchPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: e.touches[0].clientX - rect.left,
-                y: e.touches[0].top
-            };
-        }
-
-        function startDraw(e) {
-            isDrawing = true;
-            const pos = getMousePos(e);
-            ctx.beginPath();
-            ctx.strokeStyle = '#fbbf24'; // Dourado
-            ctx.lineWidth = 2;
-            ctx.moveTo(pos.x, pos.y);
-        }
-
-        function draw(e) {
-            if (!isDrawing) return;
-            const pos = getMousePos(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-        }
-
-        function startDrawTouch(e) {
-            e.preventDefault();
-            isDrawing = true;
-            const pos = getTouchPos(e);
-            ctx.beginPath();
-            ctx.strokeStyle = '#fbbf24';
-            ctx.lineWidth = 2;
-            ctx.moveTo(pos.x, pos.y);
-        }
-
-        function drawTouch(e) {
-            e.preventDefault();
-            if (!isDrawing) return;
-            const pos = getTouchPos(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-        }
-
-        function stopDraw() {
-            isDrawing = false;
-        }
-
-        function clearSignature() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            appState.signatureData = null;
-            appState.signed = false;
-            saveStateToStorage();
-        }
-
-        function saveSignatureState() {
-            appState.signatureData = canvas.toDataURL();
-            appState.signed = true;
-            saveStateToStorage();
-            updateReportSummary();
-            alert("✅ Traço da assinatura eletrônica salvo com sucesso!");
-        }
-
-        // ========================================
-        // GERADOR DE RELATÓRIO TÉCNICO DIÁRIO
-        // ========================================
-        function updateReportSummary() {
-            const summary = document.getElementById('reportSummary');
-            let tasksCompleted = 0;
-            let tasksTotal = 0;
-
-            appState.blocks.forEach(b => {
-                b.tasks.forEach(t => {
-                    tasksTotal++;
-                    if (t.checked) tasksCompleted++;
-                });
-            });
-
-            let activeEquipments = appState.inventory.filter(i => i.checked).map(i => i.name).join(', ') || 'Nenhum ativado';
-
-            let occurrencesText = '';
-            appState.blocks.forEach(b => {
-                if (b.notes) {
-                    occurrencesText += `\n* Block: ${b.title}: ${b.notes}`;
-                }
-            });
-
-            summary.innerHTML = `
-DIÁRIO DE OBRAS TECNICO - FCI/Ag_IFE
------------------------------------------
-Data da Auditoria: ${new Date().toLocaleDateString('pt-BR')}
-Executante: Especialista em Entrega de Obras
-Aproveitamento: ${tasksCompleted} de ${tasksTotal} tarefas executadas.
-Equipamentos Ativos: ${activeEquipments}
-Ocorrências em Campo: ${occurrencesText || 'Nenhuma anormalidade registrada.'}
-Assinatura Digital Ativa: ${appState.signed ? 'CONFORMIDADE ASSINADA' : 'PENDENTE DE TRAÇO'}
------------------------------------------
-            `;
-        }
-
-        function exportDailyReportText() {
-            updateReportSummary();
-            const text = document.getElementById('reportSummary').textContent;
-            
-            try {
-                const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(text);
-                const downloadAnchor = document.createElement('a');
-                downloadAnchor.setAttribute("href", dataStr);
-                downloadAnchor.setAttribute("download", `Ag_IFE_Relatorio_Diario_${Date.now()}.txt`);
-                document.body.appendChild(downloadAnchor);
-                downloadAnchor.click();
-                downloadAnchor.remove();
-            } catch (err) {
-                alert("Erro ao exportar arquivo de texto.");
-            }
-        }
-
-        // ========================================
-        // PERSISTÊNCIA DE DADOS (LOCAL STORAGE)
-        // ========================================
-        function saveStateToStorage() {
-            localStorage.setItem('ag_ife_data_v1', JSON.stringify(appState));
-        }
-
-        function loadState() {
-            const saved = localStorage.getItem('ag_ife_data_v1');
-            if (saved) {
-                try {
-                    appState = JSON.parse(saved);
-                } catch(e) {
-                    saveStateToStorage();
-                }
-            } else {
-                saveStateToStorage();
-            }
         }
 
         function clearAllData() {
             if (confirm('⚠️ ALERTA EXTREMO:\n\nIsso apagará permanentemente todas as imagens anexadas, assinaturas, anotações de ocorrência e checklists efetuados hoje.\n\nDeseja realizar esta limpeza geral?')) {
-                localStorage.removeItem('ag_ife_data_v1');
+                localStorage.removeItem('ag_ife_data_v4');
                 location.reload();
             }
         }
