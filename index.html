@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ag_IFE 4.5 - Agenda Inteligente de Alta Engenharia</title>
+    <title>Ag_IFE 4.6 - Agenda Inteligente de Alta Engenharia</title>
     <style>
         /* ========================================
-           SISTEMA DE DESIGN COMPLETO v4.5
+           SISTEMA DE DESIGN COMPLETO v4.6
            COM TEMA CLARO/ESCURO
+           CANETA DINÂMICA: BRANCA (escuro) / PRETA (claro)
            ======================================== */
         :root {
             --bg-primary: #070a13;
@@ -33,6 +34,7 @@
             --transition-speed: 0.25s;
             --theme-toggle-bg: #222c4a;
             --theme-toggle-dot: #fbbf24;
+            --pen-color: #ffffff; /* Branco no escuro */
         }
 
         [data-theme="light"] {
@@ -46,6 +48,7 @@
             --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.08);
             --theme-toggle-bg: #cbd5e1;
             --theme-toggle-dot: #fbbf24;
+            --pen-color: #000000; /* Preto no claro */
         }
 
         * {
@@ -499,16 +502,6 @@
             transform: scale(0.95);
         }
 
-        .btn-action.android-alarm {
-            background: rgba(16, 185, 129, 0.08) !important;
-            border-color: rgba(16, 185, 129, 0.25) !important;
-            color: #34d399 !important;
-        }
-
-        .btn-action.android-alarm:active {
-            background: rgba(16, 185, 129, 0.18) !important;
-        }
-
         /* Photo Area */
         .photo-area {
             display: flex;
@@ -958,16 +951,6 @@
             justify-content: center;
         }
 
-        .btn-copy {
-            background: rgba(59, 130, 246, 0.15);
-            color: #60a5fa;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-copy:active {
-            background: rgba(59, 130, 246, 0.25);
-        }
-
         /* ========================================
            GUIA DE INSTRUÇÕES (COMPLETO)
            ======================================== */
@@ -1139,83 +1122,6 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        /* ========================================
-           MODAL DE COPIA MANUAL
-           ======================================== */
-        .copy-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 3000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            backdrop-filter: blur(4px);
-        }
-
-        .copy-modal-overlay.active {
-            display: flex;
-        }
-
-        .copy-modal {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            max-width: 420px;
-            width: 100%;
-            padding: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .copy-modal h3 {
-            color: var(--color-gold);
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-        }
-
-        .copy-modal p {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-        }
-
-        .copy-modal textarea {
-            width: 100%;
-            padding: 10px;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            color: var(--text-primary);
-            font-size: 0.7rem;
-            font-family: monospace;
-            resize: vertical;
-            min-height: 100px;
-            outline: none;
-        }
-
-        .copy-modal textarea:focus {
-            border-color: var(--color-gold);
-        }
-
-        .copy-modal .modal-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
-        .copy-modal .modal-actions .btn {
-            flex: 1;
-            min-width: 80px;
-        }
     </style>
 </head>
 <body>
@@ -1225,15 +1131,15 @@
          ======================================== -->
     <header>
         <div class="header-title">
-            <h1>Ag_IFE 4.5</h1>
+            <h1>Ag_IFE 4.6</h1>
             <p>Agenda do Especialista de Limpeza pós-obra</p>
         </div>
         <div class="header-actions">
             <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
                 <div class="dot"></div>
             </div>
-            <button class="btn-icon" onclick="toggleGuide()">📖</button>
-            <button class="btn-icon" onclick="testSynthAlarm()">🔊</button>
+            <button class="btn-icon" onclick="toggleGuide()">📖 Guia</button>
+            <button class="btn-icon" onclick="testSynthAlarm()">🔊 Alarme</button>
         </div>
     </header>
 
@@ -1360,33 +1266,18 @@
                     <p>Para <strong>processos químicos críticos</strong>:</p>
                     <ul>
                         <li><strong>"📅 Agenda"</strong> - Gera arquivo de calendário com alarme nativo.</li>
-                        <li><strong>"⏰ Despertador"</strong> - Tenta abrir o relógio do Android.</li>
-                        <li><strong>Em file://</strong> - Os dados são copiados para área de transferência.</li>
+                        <li><strong>Alarme Sonoro</strong> - Toque no ícone 🔊 no cabeçalho para testar.</li>
                     </ul>
                 </div>
                 <div>
                     <h3>5. Tema Claro/Escuro</h3>
-                    <p>Toque no ícone de tema no cabeçalho para alternar entre claro e escuro. A preferência é salva.</p>
+                    <p>Toque no ícone de tema no cabeçalho para alternar entre claro e escuro.</p>
+                    <p><strong>🖊️ Caneta:</strong> Branca no modo escuro | Preta no modo claro</p>
                 </div>
                 <div>
                     <h3>6. Customização de Rotinas</h3>
                     <p>Acesse a aba <strong>"⚙️ Rotinas"</strong> para criar blocos, adicionar tarefas e definir alarmes.</p>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================
-         MODAL DE COPIA MANUAL
-         ======================================== -->
-    <div class="copy-modal-overlay" id="copyModal">
-        <div class="copy-modal">
-            <h3>📋 Dados do Alarme</h3>
-            <p>Copie os dados abaixo e configure manualmente no relógio do celular:</p>
-            <textarea id="copyModalText" readonly></textarea>
-            <div class="modal-actions">
-                <button class="btn btn-gold" onclick="copyModalText()">📋 Copiar</button>
-                <button class="btn btn-secondary" onclick="closeCopyModal()">Fechar</button>
             </div>
         </div>
     </div>
@@ -1427,7 +1318,7 @@
         // ========================================
         // VERSÃO E CONFIGURAÇÃO
         // ========================================
-        const APP_VERSION = '4.5';
+        const APP_VERSION = '4.6';
         const APP_NAME = 'Ag_IFE';
 
         // ========================================
@@ -1520,6 +1411,8 @@
             if (toggle) {
                 toggle.classList.toggle('active', theme === 'light');
             }
+            // Atualizar cor da caneta
+            updatePenColor();
         }
 
         function toggleTheme() {
@@ -1527,9 +1420,21 @@
             const next = current === 'dark' ? 'light' : 'dark';
             setTheme(next);
             Toast.info(next === 'light' ? '☀️ Tema claro ativado' : '🌙 Tema escuro ativado', 1500);
-            
-            // Redimensionar canvas após mudança de tema
             setTimeout(() => resizeCanvas(), 100);
+        }
+
+        // ========================================
+        // COR DA CANETA (DINÂMICA)
+        // ========================================
+        function getPenColor() {
+            const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+            return theme === 'dark' ? '#ffffff' : '#000000';
+        }
+
+        function updatePenColor() {
+            if (ctx) {
+                ctx.strokeStyle = getPenColor();
+            }
         }
 
         // ========================================
@@ -1876,9 +1781,8 @@
         }
 
         // ========================================
-        // ALARMES NATIVOS - VERSÃO COMPLETA
+        // ALARME NATIVO - AGENDA (iCal)
         // ========================================
-        
         function downloadIcalEvent(blockId) {
             const block = appState.blocks.find(b => b.id === blockId);
             if (!block) {
@@ -1905,7 +1809,7 @@
             const icsContent = [
                 'BEGIN:VCALENDAR',
                 'VERSION:2.0',
-                'PRODID:-//Ag_IFE//v4.5//BR',
+                'PRODID:-//Ag_IFE//v4.6//BR',
                 'CALSCALE:GREGORIAN',
                 'BEGIN:VEVENT',
                 `UID:${block.id}_${Date.now()}@ag_ife`,
@@ -1946,179 +1850,6 @@
             }
         }
 
-        /**
-         * FUNÇÃO PRINCIPAL DE ALARME ANDROID
-         * Funciona em: file://, servidor HTTP, GitHub Pages
-         * 
-         * ESTRATÉGIA: 
-         * 1. Se servidor HTTP/HTTPS → tenta Intent nativo
-         * 2. Se file:// → abre modal com dados para copiar
-         * 3. Se falhar → fallback com modal
-         */
-        function launchAndroidAlarm(blockId) {
-            const block = appState.blocks.find(b => b.id === blockId);
-            if (!block) {
-                Toast.error('Bloco não encontrado.');
-                return;
-            }
-
-            if (!Platform.isAndroid()) {
-                Toast.warning('⚠️ Função específica para Android.');
-                return;
-            }
-
-            const [hour, minute] = block.alarmTime.split(':');
-            const hourNum = parseInt(hour);
-            const minuteNum = parseInt(minute);
-
-            // ====== VERIFICAR PROTOCOLO ======
-            const isFile = Platform.isFileProtocol();
-            const isHttp = Platform.isHttpProtocol();
-
-            console.log(`🔍 Protocolo: ${window.location.protocol}`);
-            console.log(`📱 Android: ${Platform.isAndroid()}`);
-            console.log(`📁 File: ${isFile}, 🌐 HTTP: ${isHttp}`);
-
-            // ====== SE FILE:// → ABRIR MODAL DIRETAMENTE ======
-            if (isFile) {
-                console.log('📁 Modo file:// detectado - Abrindo modal de cópia');
-                openCopyModal(block);
-                return;
-            }
-
-            // ====== SE HTTP/HTTPS → TENTAR INTENT ======
-            if (isHttp) {
-                console.log('🌐 Modo HTTP detectado - Tentando Intent nativo');
-                
-                const intentUrl = `intent://#Intent;` +
-                    `action=android.intent.action.SET_ALARM;` +
-                    `i.android.intent.extra.alarm.HOUR=${hourNum};` +
-                    `i.android.intent.extra.alarm.MINUTES=${minuteNum};` +
-                    `S.android.intent.extra.alarm.MESSAGE=${encodeURIComponent('Ag_IFE: ' + block.title)};` +
-                    `S.android.intent.extra.alarm.SKIP_UI=false;` +
-                    `end`;
-
-                let success = false;
-
-                // Método 1: iframe
-                try {
-                    const iframe = document.createElement('iframe');
-                    iframe.style.display = 'none';
-                    iframe.src = intentUrl;
-                    document.body.appendChild(iframe);
-                    setTimeout(() => { if (iframe.parentElement) iframe.remove(); }, 3000);
-                    success = true;
-                    console.log('✅ Método 1 (iframe) - Tentado');
-                } catch (e) {
-                    console.warn('❌ Método 1 falhou:', e);
-                }
-
-                // Método 2: link click
-                if (!success) {
-                    try {
-                        const link = document.createElement('a');
-                        link.href = intentUrl;
-                        link.style.display = 'none';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        success = true;
-                        console.log('✅ Método 2 (link) - Tentado');
-                    } catch (e) {
-                        console.warn('❌ Método 2 falhou:', e);
-                    }
-                }
-
-                // Método 3: window.location
-                if (!success) {
-                    try {
-                        window.location.href = intentUrl;
-                        success = true;
-                        console.log('✅ Método 3 (location) - Tentado');
-                    } catch (e) {
-                        console.warn('❌ Método 3 falhou:', e);
-                    }
-                }
-
-                if (success) {
-                    Toast.info(`⏰ Abrindo configuração para ${block.alarmTime}...`, 3000);
-                    Toast.info(`📌 ${truncateText(block.title, 35)}`, 4000);
-                    return;
-                }
-
-                // Se falhou mesmo no HTTP, abrir modal
-                console.warn('⚠️ Todos os métodos falharam - Abrindo modal');
-                openCopyModal(block);
-                return;
-            }
-
-            // ====== PROTOCOLO DESCONHECIDO ======
-            console.warn('⚠️ Protocolo não reconhecido - Abrindo modal');
-            openCopyModal(block);
-        }
-
-        /**
-         * Abre o modal com os dados do alarme para cópia manual
-         */
-        function openCopyModal(block) {
-            const modal = document.getElementById('copyModal');
-            const textarea = document.getElementById('copyModalText');
-            
-            const copyText = 
-                `📋 AG_IFE - ALARME MANUAL\n` +
-                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-                `📌 Título: ${block.title}\n` +
-                `⏰ Horário: ${block.alarmTime}\n` +
-                `📅 Data: ${new Date().toLocaleDateString('pt-BR')}\n` +
-                `📋 Tarefas: ${block.tasks.map(t => t.text).join(', ')}\n` +
-                `📝 Anotações: ${block.notes || 'Nenhuma'}\n` +
-                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-                `💡 Configure manualmente no relógio do celular.`;
-
-            textarea.value = copyText;
-            modal.classList.add('active');
-            
-            // Selecionar texto automaticamente
-            setTimeout(() => {
-                textarea.select();
-                textarea.setSelectionRange(0, textarea.value.length);
-            }, 200);
-
-            Toast.info('📋 Dados prontos para copiar!', 3000);
-        }
-
-        /**
-         * Fecha o modal de cópia
-         */
-        function closeCopyModal() {
-            document.getElementById('copyModal').classList.remove('active');
-        }
-
-        /**
-         * Copia o texto do modal para área de transferência
-         */
-        function copyModalText() {
-            const textarea = document.getElementById('copyModalText');
-            try {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(textarea.value).then(() => {
-                        Toast.success('📋 Dados copiados com sucesso!', 2500);
-                    }).catch(() => {
-                        // Fallback
-                        textarea.select();
-                        document.execCommand('copy');
-                        Toast.success('📋 Dados copiados!', 2000);
-                    });
-                } else {
-                    textarea.select();
-                    document.execCommand('copy');
-                    Toast.success('📋 Dados copiados!', 2000);
-                }
-            } catch (e) {
-                Toast.error('Erro ao copiar. Selecione e copie manualmente.');
-            }
-        }
-
         // ========================================
         // RENDER: TIMELINE
         // ========================================
@@ -2138,8 +1869,6 @@
                 `;
                 return;
             }
-
-            const isAndroid = Platform.isAndroid();
 
             appState.blocks.forEach((block) => {
                 const div = document.createElement('div');
@@ -2169,11 +1898,6 @@
                     '📷';
                 const photoClass = block.photoData ? 'photo-area has-photo' : 'photo-area';
 
-                // Botão Android (apenas para Android)
-                const androidBtn = isAndroid ? 
-                    `<button class="btn-action android-alarm" onclick="launchAndroidAlarm('${block.id}')">⏰ Despertador</button>` : 
-                    '';
-
                 div.innerHTML = `
                     <div class="block-header">
                         <div class="block-meta">
@@ -2190,7 +1914,6 @@
 
                     <div class="block-actions">
                         <button class="btn-action" onclick="downloadIcalEvent('${block.id}')">📅 Agenda</button>
-                        ${androidBtn}
                     </div>
 
                     <div class="${photoClass}">
@@ -2526,7 +2249,7 @@
         }
 
         // ========================================
-        // CANVAS: ASSINATURA
+        // CANVAS: ASSINATURA (COM CANETA DINÂMICA)
         // ========================================
         let canvas, ctx, isDrawing = false;
 
@@ -2543,7 +2266,7 @@
             ctx.lineWidth = 2.5;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
-            ctx.strokeStyle = '#fbbf24';
+            ctx.strokeStyle = getPenColor(); // 🔥 CANETA DINÂMICA
             
             canvas.addEventListener('mousedown', startDraw);
             canvas.addEventListener('mousemove', draw);
@@ -2572,6 +2295,8 @@
             const rect = canvas.parentElement.getBoundingClientRect();
             canvas.width = Math.max(rect.width - 32, 200);
             canvas.height = 140;
+            
+            ctx.strokeStyle = getPenColor(); // 🔥 CANETA DINÂMICA
             
             if (data && data !== 'data:,') {
                 const img = new Image();
@@ -2612,6 +2337,7 @@
             e.preventDefault();
             if (!isDrawing) return;
             const pos = getMousePos(e);
+            ctx.strokeStyle = getPenColor(); // 🔥 CANETA DINÂMICA
             ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
         }
@@ -2628,6 +2354,7 @@
             e.preventDefault();
             if (!isDrawing) return;
             const pos = getTouchPos(e);
+            ctx.strokeStyle = getPenColor(); // 🔥 CANETA DINÂMICA
             ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
         }
@@ -2747,11 +2474,11 @@
             // Log do protocolo
             console.log(`🌐 Protocolo: ${window.location.protocol}`);
             if (Platform.isFileProtocol()) {
-                console.warn('⚠️ Executando via file:// - Alarmes usarão modal de cópia');
-                Toast.info('📁 Modo file:// - O Despertador abrirá modal com dados para copiar.', 5000);
+                console.warn('⚠️ Executando via file://');
+                Toast.info('📁 Modo file:// - Use "📅 Agenda" para alarme no calendário.', 5000);
             }
             if (Platform.isHttpProtocol()) {
-                console.log('✅ Executando via HTTP/HTTPS - Alarmes nativos disponíveis');
+                console.log('✅ Executando via HTTP/HTTPS');
             }
             
             renderTimeline();
@@ -2778,10 +2505,10 @@
             
             // Log de diagnóstico
             if (Platform.isAndroid()) {
-                console.log('📱 Android detectado - Suporte a alarmes nativos disponível');
+                console.log('📱 Android detectado');
             }
             if (Platform.isIOS()) {
-                console.log('📱 iOS detectado - Usando fallback para alarmes');
+                console.log('📱 iOS detectado');
             }
         }
 
@@ -2799,10 +2526,6 @@
         window.updateNotes = updateNotes;
         window.handlePhotoUpload = handlePhotoUpload;
         window.downloadIcalEvent = downloadIcalEvent;
-        window.launchAndroidAlarm = launchAndroidAlarm;
-        window.openCopyModal = openCopyModal;
-        window.closeCopyModal = closeCopyModal;
-        window.copyModalText = copyModalText;
         window.addNewBlock = addNewBlock;
         window.removeBlock = removeBlock;
         window.addTaskToBlock = addTaskToBlock;
@@ -2813,6 +2536,8 @@
         window.exportDailyReportText = exportDailyReportText;
         window.clearAllData = clearAllData;
         window.Platform = Platform;
+        window.getPenColor = getPenColor;
+        window.updatePenColor = updatePenColor;
     </script>
 </body>
 </html>
