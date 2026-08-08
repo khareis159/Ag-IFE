@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ag_IFE 4.6 - Agenda Inteligente de Alta Engenharia</title>
+    <title>Ag_IFE 4.7 - Agenda Inteligente de Alta Engenharia</title>
     <style>
         /* ========================================
-           SISTEMA DE DESIGN COMPLETO v4.6
+           SISTEMA DE DESIGN COMPLETO v4.7
            COM TEMA CLARO/ESCURO
            CANETA DINÂMICA: BRANCA (escuro) / PRETA (claro)
+           INVENTÁRIO EDITÁVEL
            ======================================== */
         :root {
             --bg-primary: #070a13;
@@ -34,7 +35,7 @@
             --transition-speed: 0.25s;
             --theme-toggle-bg: #222c4a;
             --theme-toggle-dot: #fbbf24;
-            --pen-color: #ffffff; /* Branco no escuro */
+            --pen-color: #ffffff;
         }
 
         [data-theme="light"] {
@@ -48,7 +49,7 @@
             --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.08);
             --theme-toggle-bg: #cbd5e1;
             --theme-toggle-dot: #fbbf24;
-            --pen-color: #000000; /* Preto no claro */
+            --pen-color: #000000;
         }
 
         * {
@@ -74,7 +75,6 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: var(--bg-primary); }
         ::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 3px; }
@@ -596,8 +596,21 @@
         }
 
         /* ========================================
-           INVENTÁRIO
+           INVENTÁRIO (EDITÁVEL)
            ======================================== */
+        .inventory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .inventory-header .btn {
+            font-size: 0.65rem !important;
+            padding: 4px 10px !important;
+        }
+
         .inventory-list {
             display: flex;
             flex-direction: column;
@@ -613,13 +626,14 @@
             justify-content: space-between;
             align-items: center;
             transition: border-color var(--transition-speed);
+            gap: 8px;
         }
 
         .inventory-card:has(input:checked) {
             border-color: var(--color-gold);
         }
 
-        .inventory-info {
+        .inventory-card .inventory-info {
             display: flex;
             flex-direction: column;
             gap: 1px;
@@ -627,14 +641,55 @@
             min-width: 0;
         }
 
-        .inventory-name {
+        .inventory-card .inventory-name {
             font-size: 0.78rem;
             font-weight: 600;
         }
 
-        .inventory-desc {
+        .inventory-card .inventory-desc {
             font-size: 0.64rem;
             color: var(--text-secondary);
+        }
+
+        .inventory-card .inventory-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .inventory-card .inventory-actions .btn-xs {
+            padding: 2px 6px;
+            font-size: 0.6rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: all var(--transition-speed);
+            font-family: var(--font-family);
+        }
+
+        .inventory-card .inventory-actions .btn-xs:active {
+            transform: scale(0.95);
+        }
+
+        .inventory-card .inventory-actions .btn-edit {
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+
+        .inventory-card .inventory-actions .btn-edit:active {
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .inventory-card .inventory-actions .btn-delete {
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .inventory-card .inventory-actions .btn-delete:active {
+            background: rgba(239, 68, 68, 0.15);
         }
 
         .inventory-card input[type="checkbox"] {
@@ -643,6 +698,86 @@
             accent-color: var(--color-gold);
             cursor: pointer;
             flex-shrink: 0;
+        }
+
+        /* ========================================
+           MODAL DE EDIÇÃO DE INVENTÁRIO
+           ======================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            max-width: 420px;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-box h3 {
+            color: var(--color-gold);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .modal-box .form-row {
+            margin-bottom: 10px;
+        }
+
+        .modal-box .form-row label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .modal-box .form-row input {
+            width: 100%;
+            padding: 8px 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 0.78rem;
+            outline: none;
+            font-family: var(--font-family);
+            transition: border-color var(--transition-speed);
+        }
+
+        .modal-box .form-row input:focus {
+            border-color: var(--color-gold);
+        }
+
+        .modal-box .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .modal-box .modal-actions .btn {
+            flex: 1;
+            justify-content: center;
         }
 
         /* ========================================
@@ -951,6 +1086,16 @@
             justify-content: center;
         }
 
+        .btn-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:active {
+            background: rgba(16, 185, 129, 0.25);
+        }
+
         /* ========================================
            GUIA DE INSTRUÇÕES (COMPLETO)
            ======================================== */
@@ -1083,6 +1228,7 @@
             .tab-btn .tab-icon { font-size: 1rem; }
             .tab-nav { height: 54px; }
             main { padding: 8px 10px 64px; }
+            .inventory-header { flex-direction: column; align-items: stretch; }
         }
 
         @media (min-width: 768px) {
@@ -1108,20 +1254,6 @@
         .flex-1 { flex: 1; }
         .min-w-0 { min-width: 0; }
         .break-words { word-break: break-word; }
-
-        /* Spinner */
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid var(--border-color);
-            border-top-color: var(--color-gold);
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
@@ -1131,15 +1263,15 @@
          ======================================== -->
     <header>
         <div class="header-title">
-            <h1>Ag_IFE 4.6</h1>
+            <h1>Ag_IFE 4.7</h1>
             <p>Agenda do Especialista de Limpeza pós-obra</p>
         </div>
         <div class="header-actions">
             <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
                 <div class="dot"></div>
             </div>
-            <button class="btn-icon" onclick="toggleGuide()">📖 Guia</button>
-            <button class="btn-icon" onclick="testSynthAlarm()">🔊 Alarme</button>
+            <button class="btn-icon" onclick="toggleGuide()">📖</button>
+            <button class="btn-icon" onclick="testSynthAlarm()">🔊</button>
         </div>
     </header>
 
@@ -1153,11 +1285,16 @@
             <div class="timeline-container" id="timelineList"></div>
         </section>
 
-        <!-- ABA 2: INVENTÁRIO -->
+        <!-- ABA 2: INVENTÁRIO (EDITÁVEL) -->
         <section id="tab-inventory" class="tab-content">
             <div class="report-view">
-                <h3>📦 Controle de Ativos e Insumos</h3>
-                <p>Marque os equipamentos retirados e checados no almoxarifado.</p>
+                <div class="inventory-header">
+                    <div>
+                        <h3>📦 Controle de Ativos e Insumos</h3>
+                        <p>Marque os equipamentos retirados e checados no almoxarifado.</p>
+                    </div>
+                    <button class="btn btn-success" onclick="openAddInventoryModal()">➕ Adicionar</button>
+                </div>
             </div>
             <div class="inventory-list" id="inventoryList"></div>
         </section>
@@ -1258,15 +1395,21 @@
                     <p>O aplicativo permite capturar fotos reais dos andares. Toque em <strong>"Carregar Imagem"</strong> dentro de cada bloco.</p>
                 </div>
                 <div>
-                    <h3>3. Segurança Offline</h3>
-                    <p>Todos os dados são salvos no <code>localStorage</code>. Nada é enviado à internet.</p>
+                    <h3>3. 📦 Inventário Editável</h3>
+                    <p>Na aba <strong>"Ativos"</strong> você pode:</p>
+                    <ul>
+                        <li><strong>➕ Adicionar</strong> novos equipamentos</li>
+                        <li><strong>✏️ Editar</strong> nome e descrição</li>
+                        <li><strong>🗑️ Remover</strong> itens desnecessários</li>
+                        <li><strong>✅ Marcar</strong> equipamentos checados</li>
+                    </ul>
                 </div>
                 <div>
                     <h3>4. ⚠️ Protocolo de Alarme</h3>
                     <p>Para <strong>processos químicos críticos</strong>:</p>
                     <ul>
                         <li><strong>"📅 Agenda"</strong> - Gera arquivo de calendário com alarme nativo.</li>
-                        <li><strong>Alarme Sonoro</strong> - Toque no ícone 🔊 no cabeçalho para testar.</li>
+                        <li><strong>🔊 Alarme Sonoro</strong> - Toque no ícone no cabeçalho para testar.</li>
                     </ul>
                 </div>
                 <div>
@@ -1278,6 +1421,27 @@
                     <h3>6. Customização de Rotinas</h3>
                     <p>Acesse a aba <strong>"⚙️ Rotinas"</strong> para criar blocos, adicionar tarefas e definir alarmes.</p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         MODAL DE EDIÇÃO DE INVENTÁRIO
+         ======================================== -->
+    <div class="modal-overlay" id="inventoryModal">
+        <div class="modal-box">
+            <h3 id="inventoryModalTitle">📦 Adicionar Item</h3>
+            <div class="form-row">
+                <label for="invModalName">Nome do Equipamento</label>
+                <input type="text" id="invModalName" placeholder="Ex: Serra Circular" maxlength="60">
+            </div>
+            <div class="form-row">
+                <label for="invModalDesc">Descrição / Observação</label>
+                <input type="text" id="invModalDesc" placeholder="Ex: Verificar lâmina" maxlength="100">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeInventoryModal()">Cancelar</button>
+                <button class="btn btn-gold" id="invModalSaveBtn" onclick="saveInventoryItem()">💾 Salvar</button>
             </div>
         </div>
     </div>
@@ -1318,7 +1482,7 @@
         // ========================================
         // VERSÃO E CONFIGURAÇÃO
         // ========================================
-        const APP_VERSION = '4.6';
+        const APP_VERSION = '4.7';
         const APP_NAME = 'Ag_IFE';
 
         // ========================================
@@ -1411,7 +1575,6 @@
             if (toggle) {
                 toggle.classList.toggle('active', theme === 'light');
             }
-            // Atualizar cor da caneta
             updatePenColor();
         }
 
@@ -1495,10 +1658,10 @@
         // DADOS PADRÃO
         // ========================================
         const DEFAULT_INVENTORY = [
-            { id: "inv_1", name: "Politriz Rotativa Bosch 1200W", desc: "Verificar integridade do disco de feltro", checked: false },
-            { id: "inv_2", name: "Aspirador de Micropartículas HEPA", desc: "Checar se o saco coletor está vazio", checked: false },
-            { id: "inv_3", name: "Detergente de Ph Neutro", desc: "Comprovação de FISPQ para mármore", checked: false },
-            { id: "inv_4", name: "Feltros e Panos de Microfibra", desc: "Zerar qualquer micro-abrasivo na área", checked: false }
+            { id: "inv_1", name: "Politriz Rotativa Bosch 1200W", desc: "Verificar integridade do disco de feltro mole.", checked: false },
+            { id: "inv_2", name: "Aspirador de Micropartículas HEPA", desc: "Checar se o saco coletor está vazio.", checked: false },
+            { id: "inv_3", name: "Detergente de Ph Neutro (Bellinzoni)", desc: "Comprovação de FISPQ para mármore.", checked: false },
+            { id: "inv_4", name: "Feltros e Panos de Microfibra de 400g/m²", desc: "Zerar qualquer micro-abrasivo na área.", checked: false }
         ];
 
         const DEFAULT_BLOCKS = [
@@ -1809,7 +1972,7 @@
             const icsContent = [
                 'BEGIN:VCALENDAR',
                 'VERSION:2.0',
-                'PRODID:-//Ag_IFE//v4.6//BR',
+                'PRODID:-//Ag_IFE//v4.7//BR',
                 'CALSCALE:GREGORIAN',
                 'BEGIN:VEVENT',
                 `UID:${block.id}_${Date.now()}@ag_ife`,
@@ -1875,7 +2038,6 @@
                 div.className = `time-block ${block.colorClass}`;
                 div.id = `block-${block.id}`;
 
-                // Tasks
                 let tasksHtml = '';
                 if (block.tasks && block.tasks.length > 0) {
                     block.tasks.forEach((task, tIdx) => {
@@ -1892,7 +2054,6 @@
                     tasksHtml = `<span class="task-empty">Nenhuma tarefa cadastrada.</span>`;
                 }
 
-                // Photo
                 const photoHtml = block.photoData ? 
                     `<img src="${block.photoData}" alt="Foto">` : 
                     '📷';
@@ -1946,7 +2107,7 @@
         }
 
         // ========================================
-        // RENDER: INVENTÁRIO
+        // RENDER: INVENTÁRIO (EDITÁVEL)
         // ========================================
         function renderInventory() {
             const container = document.getElementById('inventoryList');
@@ -1956,6 +2117,7 @@
                 container.innerHTML = `
                     <div class="report-view text-center" style="padding:16px;">
                         <p class="text-secondary">Nenhum item cadastrado.</p>
+                        <button class="btn btn-success" onclick="openAddInventoryModal()" style="margin-top:8px;">➕ Adicionar Item</button>
                     </div>
                 `;
                 return;
@@ -1969,11 +2131,100 @@
                         <span class="inventory-name">${escapeHtml(item.name)}</span>
                         <span class="inventory-desc">${escapeHtml(item.desc)}</span>
                     </div>
-                    <input type="checkbox" ${item.checked ? 'checked' : ''} 
-                           onchange="toggleInventory(${idx})">
+                    <div class="inventory-actions">
+                        <button class="btn-xs btn-edit" onclick="openEditInventoryModal(${idx})" title="Editar">✏️</button>
+                        <button class="btn-xs btn-delete" onclick="removeInventoryItem(${idx})" title="Remover">🗑️</button>
+                        <input type="checkbox" ${item.checked ? 'checked' : ''} 
+                               onchange="toggleInventory(${idx})" title="Marcar/Desmarcar">
+                    </div>
                 `;
                 container.appendChild(div);
             });
+        }
+
+        // ========================================
+        // FUNÇÕES: INVENTÁRIO (CRUD)
+        // ========================================
+        let editingInventoryIndex = -1;
+
+        function openAddInventoryModal() {
+            editingInventoryIndex = -1;
+            document.getElementById('inventoryModalTitle').textContent = '📦 Adicionar Item';
+            document.getElementById('invModalSaveBtn').textContent = '➕ Adicionar';
+            document.getElementById('invModalName').value = '';
+            document.getElementById('invModalDesc').value = '';
+            document.getElementById('inventoryModal').classList.add('active');
+            setTimeout(() => document.getElementById('invModalName').focus(), 200);
+        }
+
+        function openEditInventoryModal(idx) {
+            const item = appState.inventory[idx];
+            if (!item) return;
+            editingInventoryIndex = idx;
+            document.getElementById('inventoryModalTitle').textContent = '✏️ Editar Item';
+            document.getElementById('invModalSaveBtn').textContent = '💾 Atualizar';
+            document.getElementById('invModalName').value = item.name;
+            document.getElementById('invModalDesc').value = item.desc || '';
+            document.getElementById('inventoryModal').classList.add('active');
+            setTimeout(() => document.getElementById('invModalName').focus(), 200);
+        }
+
+        function closeInventoryModal() {
+            document.getElementById('inventoryModal').classList.remove('active');
+            editingInventoryIndex = -1;
+        }
+
+        function saveInventoryItem() {
+            const nameInput = document.getElementById('invModalName');
+            const descInput = document.getElementById('invModalDesc');
+            const name = sanitizeString(nameInput.value);
+            const desc = sanitizeString(descInput.value);
+
+            if (!name) {
+                Toast.warning('Informe o nome do equipamento.');
+                nameInput.focus();
+                return;
+            }
+
+            if (editingInventoryIndex === -1) {
+                // Adicionar novo
+                appState.inventory.push({
+                    id: 'inv_' + Date.now(),
+                    name: name,
+                    desc: desc,
+                    checked: false
+                });
+                Toast.success('✅ Item adicionado!');
+            } else {
+                // Editar existente
+                const item = appState.inventory[editingInventoryIndex];
+                if (item) {
+                    item.name = name;
+                    item.desc = desc;
+                    Toast.success('✅ Item atualizado!');
+                }
+            }
+
+            saveState();
+            renderInventory();
+            closeInventoryModal();
+        }
+
+        function removeInventoryItem(idx) {
+            if (idx < 0 || idx >= appState.inventory.length) return;
+            const name = appState.inventory[idx].name;
+            if (confirm(`Remover "${name}" do inventário?`)) {
+                appState.inventory.splice(idx, 1);
+                saveState();
+                renderInventory();
+                Toast.info(`🗑️ "${name}" removido.`);
+            }
+        }
+
+        function toggleInventory(idx) {
+            if (idx < 0 || idx >= appState.inventory.length) return;
+            appState.inventory[idx].checked = !appState.inventory[idx].checked;
+            saveState();
         }
 
         // ========================================
@@ -2240,15 +2491,6 @@
         }
 
         // ========================================
-        // FUNÇÕES: INVENTÁRIO
-        // ========================================
-        function toggleInventory(idx) {
-            if (idx < 0 || idx >= appState.inventory.length) return;
-            appState.inventory[idx].checked = !appState.inventory[idx].checked;
-            saveState();
-        }
-
-        // ========================================
         // CANVAS: ASSINATURA (COM CANETA DINÂMICA)
         // ========================================
         let canvas, ctx, isDrawing = false;
@@ -2266,7 +2508,7 @@
             ctx.lineWidth = 2.5;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
-            ctx.strokeStyle = getPenColor(); // 🔥 CANETA DINÂMICA
+            ctx.strokeStyle = getPenColor();
             
             canvas.addEventListener('mousedown', startDraw);
             canvas.addEventListener('mousemove', draw);
@@ -2296,7 +2538,7 @@
             canvas.width = Math.max(rect.width - 32, 200);
             canvas.height = 140;
             
-            ctx.strokeStyle = getPenColor(); // 🔥 CANETA DINÂMICA
+            ctx.strokeStyle = getPenColor();
             
             if (data && data !== 'data:,') {
                 const img = new Image();
@@ -2337,7 +2579,7 @@
             e.preventDefault();
             if (!isDrawing) return;
             const pos = getMousePos(e);
-            ctx.strokeStyle = getPenColor(); // 🔥 CANETA DINÂMICA
+            ctx.strokeStyle = getPenColor();
             ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
         }
@@ -2354,7 +2596,7 @@
             e.preventDefault();
             if (!isDrawing) return;
             const pos = getTouchPos(e);
-            ctx.strokeStyle = getPenColor(); // 🔥 CANETA DINÂMICA
+            ctx.strokeStyle = getPenColor();
             ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
         }
@@ -2413,7 +2655,7 @@
         // LIMPEZA
         // ========================================
         function clearAllData() {
-            if (confirm('⚠️ ATENÇÃO!\n\nIsso apagará TODOS os dados:\n• Assinaturas\n• Fotos\n• Checklists\n• Anotações\n\nDeseja continuar?')) {
+            if (confirm('⚠️ ATENÇÃO!\n\nIsso apagará TODOS os dados:\n• Assinaturas\n• Fotos\n• Checklists\n• Anotações\n• Inventário\n\nDeseja continuar?')) {
                 try {
                     Storage.removeItem('data_v4');
                     Toast.info('🗑️ Dados apagados. Recarregando...', 2000);
@@ -2447,6 +2689,9 @@
             if (tabId === 'tab-routines') {
                 renderRoutinesEditor();
             }
+            if (tabId === 'tab-inventory') {
+                renderInventory();
+            }
         }
 
         // ========================================
@@ -2464,14 +2709,12 @@
             
             Toast.init();
             
-            // Carregar tema
             const savedTheme = getTheme();
             setTheme(savedTheme);
             
             initState();
             console.log(`📦 ${appState.blocks.length} blocos, ${appState.inventory.length} itens`);
             
-            // Log do protocolo
             console.log(`🌐 Protocolo: ${window.location.protocol}`);
             if (Platform.isFileProtocol()) {
                 console.warn('⚠️ Executando via file://');
@@ -2489,7 +2732,6 @@
             
             startAlarmChecker();
             
-            // Ativar áudio no primeiro toque
             const activateAudio = () => {
                 const ctx = getAudioContext();
                 if (ctx && ctx.state === 'suspended') {
@@ -2503,7 +2745,6 @@
             
             console.log(`✅ ${APP_NAME} ${APP_VERSION} pronto!`);
             
-            // Log de diagnóstico
             if (Platform.isAndroid()) {
                 console.log('📱 Android detectado');
             }
@@ -2531,6 +2772,11 @@
         window.addTaskToBlock = addTaskToBlock;
         window.removeTaskFromBlock = removeTaskFromBlock;
         window.toggleInventory = toggleInventory;
+        window.openAddInventoryModal = openAddInventoryModal;
+        window.openEditInventoryModal = openEditInventoryModal;
+        window.closeInventoryModal = closeInventoryModal;
+        window.saveInventoryItem = saveInventoryItem;
+        window.removeInventoryItem = removeInventoryItem;
         window.clearSignature = clearSignature;
         window.saveSignatureState = saveSignatureState;
         window.exportDailyReportText = exportDailyReportText;
