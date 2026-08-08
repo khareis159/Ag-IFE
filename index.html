@@ -2,31 +2,34 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Ag_IFE - Agenda Inteligente de Alta Engenharia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Ag_IFE 4.4 - Agenda Inteligente de Alta Engenharia</title>
     <style>
         /* ========================================
-           SISTEMA DE DESIGN (Luxury Theme)
+           SISTEMA DE DESIGN COMPLETO v4.4
            ======================================== */
         :root {
-            --bg-primary: #070a13;      /* Azul escuro profundo */
-            --bg-card: #0f1423;         /* Card corporativo escuro */
+            --bg-primary: #070a13;
+            --bg-card: #0f1423;
             --bg-input: #171d33;
             --border-color: #222c4a;
-            --text-primary: #f1f5f9;    /* Branco/Prata */
-            --text-secondary: #6b7c96;  /* Cinza-azul */
-            --color-gold: #fbbf24;      /* Amarelo/Dourado */
-            
-            /* Sinalização de Blocos */
-            --color-green: #10b981;     /* 🟢 Preparação / FISPQ */
-            --color-blue: #3b82f6;      /* 🔵 Técnica / Mármores */
-            --color-yellow: #eab308;    /* 🟡 Intervalo Ergonômico */
-            --color-orange: #f97316;    /* 🟠 Acabamento Fino */
-            --color-purple: #8b5cf6;    /* 🟣 Maquinário / Inventário */
-            --color-red: #ef4444;       /* 🔴 Entrega Legal */
-
-            --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            --bg-modal: rgba(7, 10, 19, 0.97);
+            --text-primary: #f1f5f9;
+            --text-secondary: #6b7c96;
+            --color-gold: #fbbf24;
+            --color-gold-dim: rgba(251, 191, 36, 0.12);
+            --color-green: #10b981;
+            --color-blue: #3b82f6;
+            --color-yellow: #eab308;
+            --color-orange: #f97316;
+            --color-purple: #8b5cf6;
+            --color-red: #ef4444;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --bg-modal: rgba(7, 10, 19, 0.96);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --transition-speed: 0.25s;
         }
 
         [data-theme="light"] {
@@ -36,7 +39,8 @@
             --border-color: #cbd5e1;
             --text-primary: #0f172a;
             --text-secondary: #475569;
-            --bg-modal: rgba(240, 244, 248, 0.97);
+            --bg-modal: rgba(240, 244, 248, 0.96);
+            --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
 
         * {
@@ -49,7 +53,8 @@
         html, body {
             height: 100%;
             width: 100%;
-            overflow: hidden; /* Corta rolagem dupla no nível raiz */
+            overflow: hidden;
+            position: relative;
         }
 
         body {
@@ -58,58 +63,150 @@
             color: var(--text-primary);
             display: flex;
             flex-direction: column;
-            transition: background-color 0.25s, color 0.2s;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 3px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-gold);
+            border-radius: 3px;
         }
 
         /* ========================================
-           ÁREA ROLÁVEL PRINCIPAL
-           ======================================== */
-        main {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            padding-bottom: 84px; /* Liberação para barra de abas inferior */
-        }
-
-        /* ========================================
-           CABEÇALHO DA AGENDA
+           CABEÇALHO
            ======================================== */
         header {
             background-color: var(--bg-card);
             border-bottom: 1px solid var(--border-color);
-            padding: 12px 16px;
+            padding: 8px 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 10;
             flex-shrink: 0;
+            min-height: 50px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         .header-title h1 {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: 800;
             letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--color-gold), #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .header-title p {
-            font-size: 0.75rem;
+            font-size: 0.6rem;
             color: var(--text-secondary);
+            -webkit-text-fill-color: var(--text-secondary);
+            line-height: 1.2;
         }
 
         .header-actions {
             display: flex;
             gap: 6px;
+            align-items: center;
         }
 
-        .btn-test-sound {
+        .btn-icon {
             background: none;
             border: 1px solid var(--border-color);
-            color: var(--color-gold);
-            padding: 6px 12px;
-            font-size: 0.75rem;
-            border-radius: 6px;
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            font-size: 0.6rem;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            font-weight: bold;
+            transition: all var(--transition-speed);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        .btn-icon:active {
+            border-color: var(--color-gold);
+            color: var(--color-gold);
+            transform: scale(0.95);
+        }
+
+        /* ========================================
+           TOAST NOTIFICATIONS
+           ======================================== */
+        .toast-container {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            max-width: 92%;
+            width: 400px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: toastIn 0.3s ease-out;
+            pointer-events: auto;
+            border-left: 4px solid var(--color-gold);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .toast.success { border-left-color: var(--color-green); }
+        .toast.error { border-left-color: var(--color-red); }
+        .toast.warning { border-left-color: var(--color-orange); }
+
+        .toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+        .toast-content { flex: 1; font-size: 0.78rem; line-height: 1.4; }
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0 4px;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        /* ========================================
+           ÁREA PRINCIPAL
+           ======================================== */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 14px 70px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* ========================================
@@ -120,76 +217,118 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 68px;
+            height: 60px;
             background-color: var(--bg-card);
             border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: space-around;
             align-items: center;
             z-index: 100;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding-bottom: var(--safe-bottom);
         }
 
         .tab-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 1px;
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 0.65rem;
+            font-size: 0.55rem;
             cursor: pointer;
-            width: 25%;
-            height: 100%;
-            justify-content: center;
-            transition: color 0.2s;
+            padding: 4px 8px;
+            transition: color var(--transition-speed);
+            position: relative;
+            min-width: 48px;
+            font-weight: 500;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tab-btn .tab-icon {
+            font-size: 1.1rem;
+            transition: transform var(--transition-speed);
         }
 
         .tab-btn.active {
             color: var(--color-gold);
-            font-weight: bold;
         }
 
-        .tab-icon {
-            font-size: 1.25rem;
+        .tab-btn.active .tab-icon {
+            transform: scale(1.05);
+        }
+
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--color-gold);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .tab-btn.active::after {
+            width: 60%;
         }
 
         .tab-content {
             display: none;
+            animation: fadeIn 0.25s ease-out;
         }
 
         .tab-content.active {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            animation: slideUp 0.2s ease-out;
+            gap: 12px;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(12px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
         /* ========================================
-           LINHA DO TEMPO (TIMELINE)
+           TIMELINE BLOCKS
            ======================================== */
         .timeline-container {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .time-block {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: var(--radius);
+            padding: 12px 14px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
             position: relative;
             overflow: hidden;
-            transition: transform 0.2s;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: var(--shadow-card);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .time-block:active {
+            transform: scale(0.99);
         }
 
         .time-block::before {
@@ -197,11 +336,11 @@
             position: absolute;
             left: 0;
             top: 0;
-            width: 5px;
+            width: 4px;
             height: 100%;
+            border-radius: 0 2px 2px 0;
         }
 
-        /* Configuração de Cores Dinâmicas */
         .block-green::before { background-color: var(--color-green); }
         .block-blue::before { background-color: var(--color-blue); }
         .block-yellow::before { background-color: var(--color-yellow); }
@@ -213,107 +352,172 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            gap: 6px;
         }
 
         .block-meta {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 1px;
+            flex: 1;
+            min-width: 0;
         }
 
         .block-title {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 700;
+            line-height: 1.2;
+            word-break: break-word;
         }
 
         .block-time {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: var(--text-secondary);
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .block-alarm-badge {
-            background-color: rgba(251, 191, 36, 0.1);
+            background: var(--color-gold-dim);
             color: var(--color-gold);
-            font-size: 0.7rem;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            border: 1px solid rgba(251, 191, 36, 0.2);
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            border: 1px solid rgba(251, 191, 36, 0.15);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            flex-shrink: 0;
         }
 
-        /* Checklist Interno */
+        .block-alarm-badge .alarm-icon {
+            font-size: 0.5rem;
+        }
+
+        /* Task List */
         .task-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            background-color: rgba(255, 255, 255, 0.01);
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
+            border-radius: var(--radius-sm);
+            padding: 8px 10px;
+        }
+
+        .task-list-label {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
         }
 
         .task-item {
             display: flex;
             align-items: flex-start;
-            gap: 10px;
-            font-size: 0.8rem;
+            gap: 8px;
+            font-size: 0.74rem;
             cursor: pointer;
+            padding: 2px 0;
+            transition: opacity 0.15s;
+        }
+
+        .task-item:active {
+            opacity: 0.7;
         }
 
         .task-item input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             accent-color: var(--color-gold);
             cursor: pointer;
             margin-top: 1px;
+            flex-shrink: 0;
         }
 
-        /* Painel Opcional de Alarmes Nativo/Híbridos */
-        .block-native-sync {
+        .task-item.checked span {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .task-empty {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Block Actions */
+        .block-actions {
             display: flex;
-            gap: 6px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding-top: 10px;
+            gap: 4px;
             flex-wrap: wrap;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 8px;
         }
 
-        .btn-sync-action {
-            font-size: 0.7rem !important;
-            padding: 6px 10px !important;
-            border-radius: 6px !important;
-            background-color: var(--bg-input) !important;
+        .btn-action {
+            font-size: 0.6rem !important;
+            padding: 4px 10px !important;
+            border-radius: var(--radius-sm) !important;
+            background: var(--bg-input) !important;
             border: 1px solid var(--border-color) !important;
             color: var(--text-primary) !important;
             cursor: pointer;
+            transition: all var(--transition-speed);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: var(--font-family);
         }
 
-        .btn-sync-action:hover {
+        .btn-action:active {
             border-color: var(--color-gold) !important;
+            background: var(--color-gold-dim) !important;
+            transform: scale(0.95);
         }
 
-        /* Foto / Anexo do Bloco */
+        .btn-action.android-alarm {
+            background: rgba(16, 185, 129, 0.08) !important;
+            border-color: rgba(16, 185, 129, 0.25) !important;
+            color: #34d399 !important;
+        }
+
+        .btn-action.android-alarm:active {
+            background: rgba(16, 185, 129, 0.18) !important;
+        }
+
+        /* Photo Area */
         .photo-area {
             display: flex;
             align-items: center;
-            gap: 12px;
-            background-color: var(--bg-input);
+            gap: 10px;
+            background: var(--bg-input);
             border: 1px dashed var(--border-color);
-            padding: 12px;
-            border-radius: 8px;
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            transition: border-color var(--transition-speed);
+        }
+
+        .photo-area.has-photo {
+            border-color: var(--color-gold);
+            border-style: solid;
         }
 
         .photo-preview {
-            width: 60px;
-            height: 60px;
-            background-color: rgba(0,0,0,0.3);
-            border-radius: 6px;
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
             border: 1px solid var(--border-color);
+            flex-shrink: 0;
         }
 
         .photo-preview img {
@@ -322,196 +526,420 @@
             object-fit: cover;
         }
 
+        .photo-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .photo-info-label {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
         .btn-upload {
-            font-size: 0.75rem;
-            background-color: var(--border-color);
+            font-size: 0.65rem;
+            background: var(--border-color);
             color: var(--text-primary);
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 4px 12px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
             border: none;
-            font-weight: bold;
+            font-weight: 600;
+            transition: background var(--transition-speed);
+            white-space: nowrap;
+            font-family: var(--font-family);
+        }
+
+        .btn-upload:active {
+            background: var(--color-gold);
+            color: #000;
+        }
+
+        /* Notes Input */
+        .notes-input {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.74rem;
+            outline: none;
+            font-family: var(--font-family);
+            width: 100%;
+            transition: border-color var(--transition-speed);
+        }
+
+        .notes-input:focus {
+            border-color: var(--color-gold);
+        }
+
+        .notes-input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.5;
         }
 
         /* ========================================
-           INVENTÁRIO E CONTROLE DE ATIVOS
+           INVENTÁRIO
            ======================================== */
         .inventory-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 6px;
         }
 
         .inventory-card {
-            background-color: var(--bg-card);
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 12px;
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: border-color var(--transition-speed);
+        }
+
+        .inventory-card:has(input:checked) {
+            border-color: var(--color-gold);
         }
 
         .inventory-info {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 1px;
+            flex: 1;
+            min-width: 0;
         }
 
         .inventory-name {
-            font-size: 0.85rem;
-            font-weight: bold;
+            font-size: 0.78rem;
+            font-weight: 600;
         }
 
         .inventory-desc {
-            font-size: 0.7rem;
+            font-size: 0.64rem;
             color: var(--text-secondary);
         }
 
+        .inventory-card input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-gold);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
         /* ========================================
-           PAINEL DE CONFIGURAÇÃO DE ROTINAS (CRUD)
+           ROTINAS EDITOR
            ======================================== */
         .routine-creator-panel {
-            background-color: var(--bg-card);
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: var(--radius);
+            padding: 12px 14px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .panel-title {
+            font-size: 0.7rem;
+            color: var(--color-gold);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .form-row {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
 
         .form-row label {
-            font-size: 0.75rem;
-            font-weight: bold;
+            font-size: 0.65rem;
+            font-weight: 600;
             color: var(--text-secondary);
             text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
-        .form-row input, .form-row select {
-            background-color: var(--bg-input);
+        .form-row input,
+        .form-row select {
+            background: var(--bg-input);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 0.85rem;
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.78rem;
             outline: none;
             font-family: var(--font-family);
+            transition: border-color var(--transition-speed);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .form-row input:focus,
+        .form-row select:focus {
+            border-color: var(--color-gold);
+        }
+
+        .form-row input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .form-row select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7c96' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 32px;
+        }
+
+        .form-row input[type="time"] {
+            -webkit-appearance: none;
+            appearance: none;
+            padding: 8px 10px;
         }
 
         .routine-editor-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
         }
 
         .editor-block-card {
-            background-color: var(--bg-card);
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: var(--radius);
+            padding: 10px 12px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
+            box-shadow: var(--shadow-card);
         }
 
         .editor-block-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 4px;
+        }
+
+        .editor-block-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .editor-block-title {
+            font-size: 0.78rem;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .editor-block-meta {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
         }
 
         .editor-tasks-container {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            background-color: rgba(0,0,0,0.2);
-            padding: 8px;
-            border-radius: 6px;
+            gap: 3px;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 6px 8px;
+            border-radius: var(--radius-sm);
         }
 
         .editor-task-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.75rem;
-            padding: 4px 0;
-            border-bottom: 1px dashed rgba(255,255,255,0.03);
+            font-size: 0.7rem;
+            padding: 2px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.03);
+        }
+
+        .editor-task-row:last-child {
+            border-bottom: none;
+        }
+
+        .editor-task-text {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            word-break: break-word;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-bullet {
+            color: var(--color-gold);
+            font-size: 0.4rem;
+            flex-shrink: 0;
+        }
+
+        .editor-task-add {
+            display: flex;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .editor-task-add input {
+            flex: 1;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            outline: none;
+            font-family: var(--font-family);
+            min-width: 0;
+        }
+
+        .editor-task-add input:focus {
+            border-color: var(--color-gold);
         }
 
         /* ========================================
-           PAINEL DE ASSINATURA E ENCERRAMENTO
+           ASSINATURA
            ======================================== */
         .signature-area {
-            background-color: var(--bg-card);
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: var(--radius);
+            padding: 12px 14px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
+            box-shadow: var(--shadow-card);
         }
 
-        canvas {
+        .signature-area h4 {
+            font-size: 0.74rem;
+        }
+
+        canvas#signatureCanvas {
             border: 1px solid var(--border-color);
-            background-color: var(--bg-input);
-            border-radius: 8px;
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
             width: 100%;
-            height: 150px;
-            touch-action: none; /* Previne rolagem ao assinar na tela */
+            height: 140px;
+            touch-action: none;
+            cursor: crosshair;
         }
 
         .canvas-controls {
             display: flex;
-            justify-content: space-between;
-            gap: 8px;
+            gap: 6px;
         }
 
         /* ========================================
-           BOTÕES E COMPONENTES GERAIS
+           RELATÓRIO
+           ======================================== */
+        .report-view {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            font-size: 0.74rem;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .report-view h3 {
+            font-size: 0.8rem;
+            color: var(--color-gold);
+        }
+
+        .report-summary {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.65rem;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 280px;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+
+        /* ========================================
+           BOTÕES GERAIS
            ======================================== */
         .btn {
-            padding: 10px 14px;
-            border-radius: 8px;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
             border: none;
-            font-weight: bold;
-            font-size: 0.8rem;
+            font-weight: 700;
+            font-size: 0.74rem;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            transition: opacity 0.2s;
+            gap: 5px;
+            transition: all var(--transition-speed);
+            font-family: var(--font-family);
         }
 
-        .btn:hover { opacity: 0.9; }
-        .btn-gold { background-color: var(--color-gold); color: #000; }
-        .btn-danger { background-color: #3f1a1a; color: #f87171; border: 1px solid #7f1d1d; }
-        .btn-secondary { background-color: var(--border-color); color: var(--text-primary); }
-        .btn-xs { padding: 4px 8px; font-size: 0.7rem; border-radius: 6px; }
+        .btn:active {
+            transform: scale(0.96);
+        }
 
-        .report-view {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            font-size: 0.8rem;
-            line-height: 1.5;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .btn-gold {
+            background: var(--color-gold);
+            color: #000;
+        }
+
+        .btn-gold:active {
+            opacity: 0.8;
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:active {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:active {
+            background: var(--bg-input);
+        }
+
+        .btn-xs {
+            padding: 2px 6px;
+            font-size: 0.6rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
         }
 
         /* ========================================
-           MÓDULO: GUIA DE INSTRUÇÕES DA AGENDA
+           GUIA DE INSTRUÇÕES (COMPLETO)
            ======================================== */
         .guide-overlay {
             position: fixed;
@@ -519,237 +947,294 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--bg-modal);
+            background: var(--bg-modal);
             z-index: 1000;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 16px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         .guide-overlay.active {
             display: flex;
+            animation: fadeIn 0.25s ease-out;
         }
 
         .guide-container {
-            background-color: var(--bg-card);
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            max-width: 500px;
+            border-radius: var(--radius);
+            max-width: 480px;
             width: 100%;
-            max-height: 80vh;
+            max-height: 85vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
         }
 
         .guide-header {
-            padding: 16px;
+            padding: 12px 16px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .guide-header h2 {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--color-gold);
         }
 
         .guide-content {
-            padding: 16px;
+            padding: 14px 16px;
             overflow-y: auto;
-            font-size: 0.8rem;
-            line-height: 1.5;
+            font-size: 0.74rem;
+            line-height: 1.6;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
         .guide-content h3 {
-            font-size: 0.85rem;
+            font-size: 0.76rem;
             border-left: 3px solid var(--color-gold);
-            padding-left: 6px;
-            margin-bottom: 4px;
-        }
-
-        .guide-content p, .guide-content ul {
-            color: var(--text-primary);
-            margin-left: 4px;
+            padding-left: 8px;
+            margin-bottom: 2px;
         }
 
         .guide-content ul {
-            list-style-type: square;
-            padding-left: 16px;
+            list-style: none;
+            padding-left: 4px;
+        }
+
+        .guide-content ul li {
+            padding: 1px 0 1px 16px;
+            position: relative;
+        }
+
+        .guide-content ul li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: var(--color-gold);
+            font-weight: bold;
         }
 
         .badge-info {
             display: inline-block;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            margin-right: 4px;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            margin-right: 3px;
         }
 
         /* ========================================
            RODAPÉ
            ======================================== */
         footer {
-            margin-top: 24px;
-            padding: 16px 8px;
-            font-size: 0.72rem;
+            margin-top: 4px;
+            padding: 12px 8px;
+            font-size: 0.62rem;
             color: var(--text-secondary);
             text-align: center;
-            line-height: 1.4;
-            border-top: 1px dashed var(--border-color);
+            line-height: 1.5;
+            border-top: 1px solid var(--border-color);
         }
 
         footer a {
             color: var(--color-gold);
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
+        }
+
+        footer a:active {
+            text-decoration: underline;
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+        @media (max-width: 380px) {
+            .header-title h1 { font-size: 0.8rem; }
+            .btn-icon { font-size: 0.55rem; padding: 3px 6px; }
+            .time-block { padding: 8px 10px; }
+            .block-title { font-size: 0.78rem; }
+            .task-item { font-size: 0.7rem; }
+            .photo-preview { width: 40px; height: 40px; }
+            .tab-btn { font-size: 0.5rem; min-width: 40px; }
+            .tab-btn .tab-icon { font-size: 1rem; }
+            .tab-nav { height: 54px; }
+            main { padding: 8px 10px 64px; }
+        }
+
+        @media (min-width: 768px) {
+            main { padding: 16px 24px 80px; max-width: 800px; margin: 0 auto; }
+            .time-block { padding: 16px 20px; }
+            .tab-nav { max-width: 600px; left: 50%; transform: translateX(-50%); border-radius: 12px 12px 0 0; }
+        }
+
+        /* ========================================
+           UTILITY CLASSES
+           ======================================== */
+        .text-center { text-align: center; }
+        .text-secondary { color: var(--text-secondary); }
+        .text-gold { color: var(--color-gold); }
+        .mt-1 { margin-top: 4px; }
+        .mb-1 { margin-bottom: 4px; }
+        .gap-1 { gap: 4px; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .w-full { width: 100%; }
+        .flex-1 { flex: 1; }
+        .min-w-0 { min-width: 0; }
+        .break-words { word-break: break-word; }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top-color: var(--color-gold);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
 
     <!-- ========================================
-         CABEÇALHO FIXO
+         CABEÇALHO
          ======================================== -->
     <header>
         <div class="header-title">
-            <h1>Ag_IFE 4.0</h1>
+            <h1>Ag_IFE 4.4</h1>
             <p>Agenda do Especialista de Limpeza pós-obra</p>
         </div>
         <div class="header-actions">
-            <button class="btn-test-sound" style="border-color: var(--border-color);" onclick="toggleGuide()">📖 Guia de Uso</button>
-            <button class="btn-test-sound" onclick="testSynthAlarm()">🔊 Alarme</button>
+            <button class="btn-icon" onclick="toggleGuide()">📖 Guia</button>
+            <button class="btn-icon" onclick="testSynthAlarm()">🔊 Alarme</button>
         </div>
     </header>
 
     <!-- ========================================
-         ÁREA ROLÁVEL DO CONTEÚDO DA ABA
+         ÁREA PRINCIPAL
          ======================================== -->
     <main>
         
-        <!-- ABA 1: LINHA DO TEMPO (TIMELINE DE TAREFAS ATIVAS) -->
+        <!-- ABA 1: TIMELINE -->
         <section id="tab-timeline" class="tab-content active">
-            <div class="timeline-container" id="timelineList">
-                <!-- Construído Dinamicamente por Javascript para herdar localStorage -->
-            </div>
+            <div class="timeline-container" id="timelineList"></div>
         </section>
 
-        <!-- ABA 2: INVENTÁRIO & ATIVOS -->
+        <!-- ABA 2: INVENTÁRIO -->
         <section id="tab-inventory" class="tab-content">
             <div class="report-view">
-                <h3 style="color: var(--color-gold);">📦 Controle de Ativos e Insumos</h3>
-                <p>Marque os equipamentos retirados e checados no almoxarifado antes de se responsabilizar pela guarda.</p>
+                <h3>📦 Controle de Ativos e Insumos</h3>
+                <p>Marque os equipamentos retirados e checados no almoxarifado.</p>
             </div>
-            <div class="inventory-list" id="inventoryList">
-                <!-- Preenchido via Javascript -->
-            </div>
+            <div class="inventory-list" id="inventoryList"></div>
         </section>
 
-        <!-- ABA 3: CONFIGURADOR DINÂMICO DE ROTINAS -->
+        <!-- ABA 3: ROTINAS -->
         <section id="tab-routines" class="tab-content">
             <div class="report-view">
-                <h3 style="color: var(--color-gold);">⚙️ Configuração Dinâmica de Rotinas</h3>
-                <p>Cadastre e customize os blocos de horários, cores temáticas de criticidade e alarmes específicos exigidos para cada tipo de obra.</p>
+                <h3>⚙️ Configuração Dinâmica de Rotinas</h3>
+                <p>Cadastre e customize os blocos de horários, cores e alarmes.</p>
             </div>
 
-            <!-- Form para Criar Novo Bloco -->
             <div class="routine-creator-panel">
-                <h4 style="font-size: 0.8rem; color: var(--color-gold); text-transform: uppercase;">Criar Novo Bloco de Tempo</h4>
+                <h4 class="panel-title">📝 Criar Novo Bloco</h4>
                 <div class="form-row">
                     <label for="newBlockTitle">Título do Bloco</label>
-                    <input type="text" id="newBlockTitle" placeholder="Ex: Limpeza de Vidros Externos">
+                    <input type="text" id="newBlockTitle" placeholder="Ex: Limpeza de Vidros" maxlength="60">
                 </div>
                 <div class="form-row">
                     <label for="newBlockTime">Vigência (Horário)</label>
                     <input type="text" id="newBlockTime" placeholder="Ex: 08:30 - 10:00">
                 </div>
                 <div class="form-row">
-                    <label for="newBlockAlarm">Horário do Despertador (HH:MM)</label>
-                    <input type="text" id="newBlockAlarm" placeholder="Ex: 09:30">
+                    <label for="newBlockAlarm">Horário do Despertador</label>
+                    <input type="time" id="newBlockAlarm" step="60">
                 </div>
                 <div class="form-row">
-                    <label for="newBlockColor">Cor de Criticidade (Código Visual)</label>
+                    <label for="newBlockColor">Cor de Criticidade</label>
                     <select id="newBlockColor">
-                        <option value="block-green">🟢 Verde (Preparação / FISPQ)</option>
-                        <option value="block-blue">🔵 Azul (Técnica / Nobre)</option>
-                        <option value="block-yellow">🟡 Amarelo (Ergonomia / Intervalo)</option>
-                        <option value="block-orange">🟠 Laranja (Fino / Acabamento)</option>
-                        <option value="block-purple">🟣 Roxo (Patrimônio / Ativos)</option>
-                        <option value="block-red">🔴 Vermelho (Legal / Checklist)</option>
+                        <option value="block-green">🟢 Verde - Preparação / FISPQ</option>
+                        <option value="block-blue">🔵 Azul - Técnica / Nobre</option>
+                        <option value="block-yellow">🟡 Amarelo - Ergonomia / Intervalo</option>
+                        <option value="block-orange">🟠 Laranja - Fino / Acabamento</option>
+                        <option value="block-purple">🟣 Roxo - Patrimônio / Ativos</option>
+                        <option value="block-red">🔴 Vermelho - Legal / Checklist</option>
                     </select>
                 </div>
-                <button class="btn btn-gold" onclick="addNewBlock()" style="margin-top: 8px;">➕ Adicionar Bloco de Rotina</button>
+                <button class="btn btn-gold btn-block" onclick="addNewBlock()">➕ Adicionar Bloco</button>
             </div>
 
-            <div class="routine-editor-list" id="routineEditorList">
-                <!-- Blocos cadastrados carregados dinamicamente para edição interna -->
-            </div>
+            <div class="routine-editor-list" id="routineEditorList"></div>
         </section>
 
-        <!-- ABA 4: RELATÓRIO DE ENTREGA & CHECKOUT -->
+        <!-- ABA 4: CHECKOUT -->
         <section id="tab-checkout" class="tab-content">
             <div class="report-view">
-                <h3 style="color: var(--color-gold);">📊 Auditoria Final Diária</h3>
-                <p>Esta assinatura atesta e assina digitalmente a conformidade das ações, isentando o profissional de avarias de montagem anteriores.</p>
+                <h3>📊 Auditoria Final Diária</h3>
+                <p>Assinatura digital atestando conformidade das ações.</p>
             </div>
 
-            <!-- Pad de Assinatura -->
             <div class="signature-area">
-                <h4 style="font-size: 0.85rem;">Assinatura Eletrônica do Especialista</h4>
-                <canvas id="signatureCanvas"></canvas>
+                <h4>✍️ Assinatura Eletrônica</h4>
+                <canvas id="signatureCanvas" height="140"></canvas>
                 <div class="canvas-controls">
-                    <button class="btn btn-secondary" onclick="clearSignature()">Limpar Painel</button>
-                    <button class="btn btn-gold" onclick="saveSignatureState()">Salvar Traço</button>
+                    <button class="btn btn-secondary" onclick="clearSignature()">🗑️ Limpar</button>
+                    <button class="btn btn-gold" onclick="saveSignatureState()">💾 Salvar</button>
                 </div>
             </div>
 
             <div class="report-view">
-                <h3 style="color: var(--color-gold);">📋 Resumo do Diário de Obras</h3>
-                <div id="reportSummary" style="font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px;">
-                    <!-- Gerado dinamicamente -->
-                </div>
-                <button class="btn btn-gold" onclick="exportDailyReportText()">Download do Relatório Técnico</button>
-                <button class="btn btn-danger" style="margin-top: 12px;" onclick="clearAllData()">⚠️ Reiniciar Tudo (Zerar App)</button>
+                <h3>📋 Resumo Diário</h3>
+                <div class="report-summary" id="reportSummary">Carregando...</div>
+                <button class="btn btn-gold" onclick="exportDailyReportText()">📥 Download</button>
+                <button class="btn btn-danger" onclick="clearAllData()">⚠️ Reiniciar Tudo</button>
             </div>
         </section>
 
-        <!-- ========================================
-             RODAPÉ INTEGRADO AO FLUXO ROLÁVEL (Sempre Visível ao Rolar)
-             ======================================== -->
         <footer>
             Carlos Alberto Reis © 2026/2027 · Suporte e Apoio<br>
-            Chave Pix / Fone WhatsApp: <a href="https://wa.me/5561999487649" target="_blank">61999487649</a>
+            WhatsApp: <a href="https://wa.me/5561999487649" target="_blank" rel="noopener">61999487649</a>
         </footer>
   
     </main>
 
     <!-- ========================================
-         MÓDULO: GUIA DE INSTRUÇÕES (RETRACTABLE)
+         GUIA DE INSTRUÇÕES (COMPLETO)
          ======================================== -->
     <div class="guide-overlay" id="guideOverlay" onclick="toggleGuide()">
         <div class="guide-container" onclick="event.stopPropagation()">
             <div class="guide-header">
                 <h2>📖 Guia de Uso Inteligente</h2>
-                <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.7rem;" onclick="toggleGuide()">Fechar ✕</button>
+                <button class="btn btn-secondary btn-xs" onclick="toggleGuide()">✕ Fechar</button>
             </div>
             <div class="guide-content">
                 <div>
                     <h3>1. Linha do Tempo e Código de Cores</h3>
-                    <p>Cada tarefa diária possui uma cor de criticidade para mapeamento de riscos pós-obra:</p>
-                    <ul style="list-style-type: none; padding-left: 0;">
-                        <li><span class="badge-info" style="background-color: var(--color-green); color:#fff">🟢 Verde</span> Preparação e análise de FISPQ químico.</li>
-                        <li><span class="badge-info" style="background-color: var(--color-blue); color:#fff">🔵 Azul</span> Limpeza técnica de superfícies nobres.</li>
-                        <li><span class="badge-info" style="background-color: var(--color-yellow); color:#000">🟡 Amarelo</span> Pausa ergonômica essencial.</li>
-                        <li><span class="badge-info" style="background-color: var(--color-orange); color:#fff">🟠 Laranja</span> Polimento fino e acabamento estético.</li>
-                        <li><span class="badge-info" style="background-color: var(--color-purple); color:#fff">🟣 Roxo</span> Guarda e manutenção de maquinários.</li>
-                        <li><span class="badge-info" style="background-color: var(--color-red); color:#fff">🔴 Vermelho</span> Auditoria final e checkout de assinatura.</li>
+                    <p>Cada tarefa possui uma cor de criticidade para mapeamento de riscos pós-obra:</p>
+                    <ul>
+                        <li><span class="badge-info" style="background:var(--color-green);color:#fff">🟢 Verde</span> Preparação e análise de FISPQ químico.</li>
+                        <li><span class="badge-info" style="background:var(--color-blue);color:#fff">🔵 Azul</span> Limpeza técnica de superfícies nobres.</li>
+                        <li><span class="badge-info" style="background:var(--color-yellow);color:#000">🟡 Amarelo</span> Pausa ergonômica essencial.</li>
+                        <li><span class="badge-info" style="background:var(--color-orange);color:#fff">🟠 Laranja</span> Polimento fino e acabamento estético.</li>
+                        <li><span class="badge-info" style="background:var(--color-purple);color:#fff">🟣 Roxo</span> Guarda e manutenção de maquinários.</li>
+                        <li><span class="badge-info" style="background:var(--color-red);color:#fff">🔴 Vermelho</span> Auditoria final e checkout de assinatura.</li>
                     </ul>
                 </div>
 
@@ -760,342 +1245,507 @@
 
                 <div>
                     <h3>3. Segurança no GitHub e Modo Offline</h3>
-                    <p>Todos os dados inseridos (assinaturas, fotos, notas) são salvos de forma independente e local na memória do navegador do seu celular (`localStorage`). O aplicativo não envia nada para a internet, garantindo sigilo absoluto de obras residenciais de alto padrão.</p>
+                    <p>Todos os dados inseridos (assinaturas, fotos, notas) são salvos de forma independente e local na memória do navegador do seu celular (<code>localStorage</code>). O aplicativo não envia nada para a internet, garantindo sigilo absoluto de obras residenciais de alto padrão.</p>
                 </div>
 
                 <div>
                     <h3>4. ⚠️ Protocolo de Alarme Seguro e Prevenção de Danos</h3>
-                    <p>O navegador do celular entra em modo de economia profunda ao desligar a tela, o que suspende cronômetros JavaScript. Para **processos químicos críticos** (como ácidos agindo em mármores):</p>
+                    <p>O navegador do celular entra em modo de economia profunda ao desligar a tela, o que suspende cronômetros JavaScript. Para <strong>processos químicos críticos</strong> (como ácidos agindo em mármores):</p>
                     <ul>
-                        <li>Use a opção <strong>"📅 Sinc. Calendário"</strong> para gerar um arquivo de calendário nativo que programará um despertador robusto no processador do sistema operacional do seu celular.</li>
-                        <li>Em celulares compatíveis, use a opção <strong>"⏰ Despertador"</strong> para abrir diretamente a configuração nativa de alarmes do seu aparelho.</li>
+                        <li>Use a opção <strong>"📅 Agenda"</strong> para gerar um arquivo de calendário nativo que programará um despertador robusto no processador do sistema operacional do seu celular.</li>
+                        <li>Em celulares Android compatíveis, use a opção <strong>"⏰ Despertador"</strong> para abrir diretamente a configuração nativa de alarmes.</li>
+                        <li><strong>⚠️ IMPORTANTE:</strong> Se estiver usando o app via <code>file://</code> (aberto diretamente do arquivo), o botão "Despertador" copiará os dados para área de transferência e fornecerá instruções manuais.</li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3>5. Nova Customização de Rotinas (v4.0)</h3>
+                    <h3>5. Nova Customização de Rotinas (v4.0+)</h3>
                     <p>Acesse a aba <strong>"⚙️ Rotinas"</strong> para ter total autonomia sobre o planejamento de tarefas. Você pode:</p>
                     <ul>
-                        <li><strong>Criar novos blocos</strong> preenchendo o formulário superior (defina Título, Horário de Vigência, Horário de Alerta no formato HH:MM e selecione a cor).</li>
+                        <li><strong>Criar novos blocos</strong> preenchendo o formulário superior (defina Título, Horário de Vigência, Horário de Alerta e selecione a cor).</li>
                         <li><strong>Adicionar tarefas específicas</strong> para cada bloco no campo "Escreva uma nova tarefa" dentro dos cartões listados no gerenciador e clicando em <strong>"➕ Add"</strong>. Elas aparecerão instantaneamente na Linha do Tempo.</li>
                         <li><strong>Excluir blocos inteiros</strong> clicando no botão vermelho <strong>"🗑️ Remover"</strong> ou remover tarefas individuais no ícone de fechar <strong>"✕"</strong> ao lado de cada uma.</li>
                     </ul>
-                    <p><em>Nota: Toda customização reescreve automaticamente os botões dinâmicos de calendário (iCal) e despertador Android de cada card, sem perdas de funcionalidade.</em></p>
+                </div>
+
+                <div>
+                    <h3>6. 📱 Dicas para Uso no Celular</h3>
+                    <ul>
+                        <li><strong>Para melhor experiência:</strong> Hospede o arquivo no GitHub Pages ou use um servidor HTTP local.</li>
+                        <li><strong>Modo offline:</strong> O app funciona completamente offline após o primeiro carregamento.</li>
+                        <li><strong>Compatibilidade:</strong> Testado em Android (Chrome, Samsung Internet) e iOS (Safari).</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 
-  
     <!-- ========================================
-         NAVEGAÇÃO DE ABAS INFERIOR (Estilo 4 Abas)
+         TOAST CONTAINER
          ======================================== -->
-    <nav class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab('tab-timeline', this)">
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ========================================
+         NAVEGAÇÃO INFERIOR
+         ======================================== -->
+    <nav class="tab-nav" role="tablist">
+        <button class="tab-btn active" role="tab" aria-selected="true" onclick="switchTab('tab-timeline', this)">
             <span class="tab-icon">🕒</span>
-            <span>Linha Tempo</span>
+            <span>Linha</span>
         </button>
-        <button class="tab-btn" onclick="switchTab('tab-inventory', this)">
+        <button class="tab-btn" role="tab" aria-selected="false" onclick="switchTab('tab-inventory', this)">
             <span class="tab-icon">📦</span>
             <span>Ativos</span>
         </button>
-        <button class="tab-btn" onclick="switchTab('tab-routines', this)">
+        <button class="tab-btn" role="tab" aria-selected="false" onclick="switchTab('tab-routines', this)">
             <span class="tab-icon">⚙️</span>
             <span>Rotinas</span>
         </button>
-        <button class="tab-btn" onclick="switchTab('tab-checkout', this)">
+        <button class="tab-btn" role="tab" aria-selected="false" onclick="switchTab('tab-checkout', this)">
             <span class="tab-icon">✍️</span>
             <span>Relatório</span>
         </button>
     </nav>
 
     <!-- ========================================
-         LÓGICA E ENGENHARIA DE DADOS JS
+         SCRIPT PRINCIPAL (COMPLETO E OTIMIZADO)
          ======================================== -->
     <script>
+        'use strict';
+
         // ========================================
-        // COFRE DE ARMAZENAMENTO SEGURO (Bypass contra erros file://)
+        // VERSÃO E CONFIGURAÇÃO
         // ========================================
-        const SafeStorage = {
-            getItem(key) {
-                try {
-                    return localStorage.getItem(key);
-                } catch (e) {
-                    return this._memoryStore[key] || null;
-                }
+        const APP_VERSION = '4.4';
+        const APP_NAME = 'Ag_IFE';
+
+        // ========================================
+        // TOAST SYSTEM
+        // ========================================
+        const Toast = {
+            container: null,
+            
+            init() {
+                this.container = document.getElementById('toastContainer');
             },
-            setItem(key, value) {
-                try {
-                    localStorage.setItem(key, value);
-                } catch (e) {
-                    this._memoryStore[key] = String(value);
-                }
+            
+            _create(message, type, duration) {
+                if (!this.container) this.init();
+                
+                const icons = {
+                    success: '✅',
+                    error: '❌',
+                    warning: '⚠️',
+                    info: 'ℹ️'
+                };
+                
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
+                    <span class="toast-content">${message}</span>
+                    <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
+                `;
+                
+                this.container.appendChild(toast);
+                
+                const timeout = setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.style.animation = 'toastOut 0.3s ease-in';
+                        setTimeout(() => toast.remove(), 300);
+                    }
+                }, duration || 4000);
+                
+                toast._timeout = timeout;
             },
-            _memoryStore: {}
+            
+            success(msg, d) { this._create(msg, 'success', d); },
+            error(msg, d) { this._create(msg, 'error', d); },
+            warning(msg, d) { this._create(msg, 'warning', d); },
+            info(msg, d) { this._create(msg, 'info', d); }
         };
 
         // ========================================
-        // ESTRUTURA DE ESTADO CENTRALIZADO (Ag_IFE v4)
+        // PLATFORM DETECTION
+        // ========================================
+        const Platform = {
+            isIOS() {
+                return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            },
+            isAndroid() {
+                return /android/i.test(navigator.userAgent);
+            },
+            isMobile() {
+                return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            },
+            isFileProtocol() {
+                return window.location.protocol === 'file:';
+            },
+            getBrowserName() {
+                const ua = navigator.userAgent.toLowerCase();
+                if (/chrome/i.test(ua) && !/edge/i.test(ua)) return 'chrome';
+                if (/samsung/i.test(ua) || /samsungbrowser/i.test(ua)) return 'samsung';
+                if (/firefox/i.test(ua)) return 'firefox';
+                if (/opr/i.test(ua)) return 'opera';
+                return 'unknown';
+            }
+        };
+
+        // ========================================
+        // STORAGE
+        // ========================================
+        const Storage = {
+            _memory: {},
+            _prefix: 'ag_ife_',
+            
+            getItem(key) {
+                const fullKey = this._prefix + key;
+                try {
+                    const data = localStorage.getItem(fullKey);
+                    if (data !== null) return data;
+                } catch (e) {}
+                return this._memory[fullKey] || null;
+            },
+            
+            setItem(key, value) {
+                const fullKey = this._prefix + key;
+                try {
+                    localStorage.setItem(fullKey, value);
+                    this._memory[fullKey] = value;
+                } catch (e) {
+                    this._memory[fullKey] = value;
+                    try { this._cleanup(); } catch {}
+                }
+            },
+            
+            removeItem(key) {
+                const fullKey = this._prefix + key;
+                try { localStorage.removeItem(fullKey); } catch (e) {}
+                delete this._memory[fullKey];
+            },
+            
+            _cleanup() {
+                const keys = Object.keys(localStorage);
+                keys.forEach(k => {
+                    if (k.startsWith('ag_ife_') && k !== 'ag_ife_data_v4') {
+                        try { localStorage.removeItem(k); } catch {}
+                    }
+                });
+            }
+        };
+
+        // ========================================
+        // ESTADO DA APLICAÇÃO
         // ========================================
         let appState = {
             signed: false,
             signatureData: null,
-            inventory: [
-                { id: "inv_1", name: "Politriz Rotativa Bosch 1200W", desc: "Verificar integridade do disco de feltro mole.", checked: false },
-                { id: "inv_2", name: "Aspirador de Micropartículas HEPA", desc: "Checar se o saco coletor está vazio.", checked: false },
-                { id: "inv_3", name: "Detergente de Ph Neutro (Bellinzoni)", desc: "Comprovação de FISPQ para mármore.", checked: false },
-                { id: "inv_4", name: "Feltros e Panos de Microfibra de 400g/m²", desc: "Zerar qualquer micro-abrasivo na área.", checked: false }
-            ],
-            blocks: [] // Carregado dinamicamente
+            inventory: [],
+            blocks: [],
+            version: APP_VERSION
         };
 
-        // Detecta se o sistema operacional é iOS (iPad, iPhone, iPod)
-        function isIOS() {
-            return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        // ========================================
+        // DADOS PADRÃO
+        // ========================================
+        const DEFAULT_INVENTORY = [
+            { id: "inv_1", name: "Politriz Rotativa Bosch 1200W", desc: "Verificar integridade do disco de feltro", checked: false },
+            { id: "inv_2", name: "Aspirador de Micropartículas HEPA", desc: "Checar se o saco coletor está vazio", checked: false },
+            { id: "inv_3", name: "Detergente de Ph Neutro", desc: "Comprovação de FISPQ para mármore", checked: false },
+            { id: "inv_4", name: "Feltros e Panos de Microfibra", desc: "Zerar qualquer micro-abrasivo na área", checked: false }
+        ];
+
+        const DEFAULT_BLOCKS = [
+            {
+                id: "block_1",
+                title: "Preparação, Segurança e FISPQ",
+                time: "07:00 - 08:30",
+                colorClass: "block-green",
+                alarmTime: "07:30",
+                alarmTriggered: false,
+                tasks: [
+                    { text: "Check-in via geolocalização na entrada do canteiro", checked: false },
+                    { text: "Validação do uso de sapato que não deixa rastro preto", checked: false },
+                    { text: "Checagem das FISPQ dos solventes do dia", checked: false }
+                ],
+                photoData: null,
+                notes: ""
+            },
+            {
+                id: "block_2",
+                title: "Limpeza Técnica Crítica",
+                time: "08:30 - 12:00",
+                colorClass: "block-blue",
+                alarmTime: "10:00",
+                alarmTriggered: false,
+                tasks: [
+                    { text: "Fotografar quaisquer riscos deixados por equipes anteriores", checked: false },
+                    { text: "Executar 'Spot Test' (área oculta) antes da lavagem de pedras", checked: false },
+                    { text: "Limpeza do vidro termoacústico com raspador zero-risco", checked: false }
+                ],
+                photoData: null,
+                notes: ""
+            },
+            {
+                id: "block_3",
+                title: "Intervalo Ergonômico",
+                time: "12:00 - 13:00",
+                colorClass: "block-yellow",
+                alarmTime: "12:50",
+                alarmTriggered: false,
+                tasks: [
+                    { text: "Retirada de EPIs de alto risco", checked: false },
+                    { text: "Pausa alimentar e hidratação preventiva", checked: false }
+                ],
+                photoData: null,
+                notes: ""
+            },
+            {
+                id: "block_4",
+                title: "Acabamento Fino e Polimento",
+                time: "13:00 - 16:30",
+                colorClass: "block-orange",
+                alarmTime: "14:30",
+                alarmTriggered: false,
+                tasks: [
+                    { text: "Aspiração total de pó flutuante com filtro de carvão HEPA", checked: false },
+                    { text: "Polimento de inox e metais escovados com pano seco", checked: false },
+                    { text: "Inspeção de reflexo e poeira com lanterna de alta potência", checked: false }
+                ],
+                photoData: null,
+                notes: ""
+            },
+            {
+                id: "block_5",
+                title: "Patrimônio & Equipamentos",
+                time: "16:30 - 17:30",
+                colorClass: "block-purple",
+                alarmTime: "17:00",
+                alarmTriggered: false,
+                tasks: [
+                    { text: "Lavagem de mangueiras e reservatórios das extratoras", checked: false },
+                    { text: "Acondicionar produtos químicos sob tranca de segurança", checked: false },
+                    { text: "Contagem física de panos e discos abrasivos", checked: false }
+                ],
+                photoData: null,
+                notes: ""
+            },
+            {
+                id: "block_6",
+                title: "Encerramento e Assinatura Legal",
+                time: "17:30 - 18:00",
+                colorClass: "block-red",
+                alarmTime: "17:50",
+                alarmTriggered: false,
+                tasks: [
+                    { text: "Criação de relatório de 'antes e depois' para o proprietário", checked: false },
+                    { text: "Checkout e fechamento de portões", checked: false }
+                ],
+                photoData: null,
+                notes: ""
+            }
+        ];
+
+        // ========================================
+        // UTILITÁRIOS
+        // ========================================
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function sanitizeString(str) {
+            if (!str) return '';
+            return str.trim().slice(0, 200);
+        }
+
+        function isValidTime(timeStr) {
+            if (!timeStr) return false;
+            return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(timeStr);
+        }
+
+        function generateId() {
+            return 'id_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+        }
+
+        function truncateText(text, maxLen) {
+            if (!text) return '';
+            return text.length > maxLen ? text.slice(0, maxLen) + '…' : text;
         }
 
         // ========================================
-        // COMPONENTES AUXILIARES DE ASSINATURA (Definidos no topo para evitar ReferenceError)
+        // GERENCIAMENTO DE ESTADO
         // ========================================
-        let canvas, ctx, isDrawing = false;
-
-        function clearSignature() {
-            if (!canvas || !ctx) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            appState.signatureData = null;
-            appState.signed = false;
-            saveStateToStorage();
+        function saveState() {
+            try {
+                const data = JSON.stringify(appState);
+                Storage.setItem('data_v4', data);
+            } catch (e) {
+                Toast.error('Erro ao salvar dados.');
+                console.error('Save error:', e);
+            }
         }
 
-        function saveSignatureState() {
-            if (!canvas) return;
-            appState.signatureData = canvas.toDataURL();
-            appState.signed = true;
-            saveStateToStorage();
-            updateReportSummary();
-            alert("✅ Traço da assinatura eletrônica salvo com sucesso!");
+        function loadState() {
+            const saved = Storage.getItem('data_v4');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed && typeof parsed === 'object') {
+                        if (!Array.isArray(parsed.blocks)) parsed.blocks = [];
+                        if (!Array.isArray(parsed.inventory)) parsed.inventory = [];
+                        appState = parsed;
+                        return true;
+                    }
+                } catch (e) {
+                    console.warn('Parse error, loading defaults');
+                }
+            }
+            return false;
         }
 
-        function getMousePos(e) {
-            if (!canvas) return { x: 0, y: 0 };
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
+        function loadDefaults() {
+            appState = {
+                signed: false,
+                signatureData: null,
+                inventory: JSON.parse(JSON.stringify(DEFAULT_INVENTORY)),
+                blocks: JSON.parse(JSON.stringify(DEFAULT_BLOCKS)),
+                version: APP_VERSION
             };
+            saveState();
         }
 
-        function getTouchPos(e) {
-            if (!canvas || !e.touches || e.touches.length === 0) return { x: 0, y: 0 };
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: e.touches[0].clientX - rect.left,
-                y: e.touches[0].clientY - rect.top // CORREÇÃO: Mapeamento de coordenadas físicas corrigido de .top para .clientY
-            };
-        }
-
-        function startDraw(e) {
-            isDrawing = true;
-            const pos = getMousePos(e);
-            ctx.beginPath();
-            ctx.strokeStyle = '#fbbf24'; 
-            ctx.lineWidth = 2;
-            ctx.moveTo(pos.x, pos.y);
-        }
-
-        function draw(e) {
-            if (!isDrawing) return;
-            const pos = getMousePos(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-        }
-
-        function startDrawTouch(e) {
-            e.preventDefault();
-            isDrawing = true;
-            const pos = getTouchPos(e);
-            ctx.beginPath();
-            ctx.strokeStyle = '#fbbf24';
-            ctx.lineWidth = 2;
-            ctx.moveTo(pos.x, pos.y);
-        }
-
-        function drawTouch(e) {
-            e.preventDefault();
-            if (!isDrawing) return;
-            const pos = getTouchPos(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-        }
-
-        function stopDraw() {
-            isDrawing = false;
+        function initState() {
+            const loaded = loadState();
+            if (!loaded) {
+                loadDefaults();
+            }
+            
+            appState.blocks.forEach(b => {
+                if (b.alarmTriggered === undefined) b.alarmTriggered = false;
+                if (!Array.isArray(b.tasks)) b.tasks = [];
+                if (b.photoData === undefined) b.photoData = null;
+                if (b.notes === undefined) b.notes = '';
+            });
+            
+            appState.inventory.forEach(i => {
+                if (i.checked === undefined) i.checked = false;
+            });
+            
+            if (appState.signed === undefined) appState.signed = false;
+            if (appState.signatureData === undefined) appState.signatureData = null;
         }
 
         // ========================================
-        // GERENCIADOR DE ÁUDIO WEB SINTETIZADO
+        // SISTEMA DE ÁUDIO (Web Audio)
         // ========================================
+        let audioContext = null;
+
+        function getAudioContext() {
+            if (!audioContext) {
+                try {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) {
+                        audioContext = new AudioCtx();
+                    }
+                } catch (e) {
+                    console.warn('Web Audio not available');
+                }
+            }
+            return audioContext;
+        }
+
         function triggerBeepAlarm() {
             try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (!AudioCtx) return;
+                const ctx = getAudioContext();
+                if (!ctx) return false;
                 
-                const ctx = new AudioCtx();
-                const playBeep = (time, freq, duration) => {
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
+                
+                const now = ctx.currentTime;
+                
+                const playBeep = (time, freq, duration, vol = 0.35) => {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
-                    
-                    osc.type = "sine";
-                    osc.frequency.setValueAtTime(freq, time);
-                    
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
                     gain.gain.setValueAtTime(0, time);
-                    gain.gain.linearRampToValueAtTime(0.4, time + 0.05);
+                    gain.gain.linearRampToValueAtTime(vol, time + 0.02);
                     gain.gain.exponentialRampToValueAtTime(0.01, time + duration);
-                    
                     osc.connect(gain);
                     gain.connect(ctx.destination);
-                    
                     osc.start(time);
-                    osc.stop(time + duration);
+                    osc.stop(time + duration + 0.05);
                 };
-
-                const now = ctx.currentTime;
-                playBeep(now, 880, 0.3);       
-                playBeep(now + 0.4, 880, 0.3); 
-                playBeep(now + 0.8, 1200, 0.5); 
                 
-            } catch (err) {
-                console.warn("Som bloqueado pelo navegador até o usuário interagir com a tela.", err);
+                playBeep(now, 880, 0.2, 0.4);
+                playBeep(now + 0.3, 880, 0.2, 0.4);
+                playBeep(now + 0.6, 1100, 0.3, 0.45);
+                playBeep(now + 1.0, 1320, 0.35, 0.5);
+                
+                return true;
+            } catch (e) {
+                console.warn('Alarm error:', e);
+                return false;
             }
         }
 
         function testSynthAlarm() {
-            triggerBeepAlarm();
-            alert("🔊 Alarme Sintetizado Ag_IFE disparado com sucesso!");
-        }
-
-        // ========================================
-        // INICIALIZAÇÃO E CARREGAMENTO
-        // ========================================
-        document.addEventListener('DOMContentLoaded', () => {
-            loadState();
-            renderTimeline();
-            renderInventory();
-            renderRoutinesEditor();
-            initSignaturePad();
-            startClockCheck();
-        });
-
-        function toggleGuide() {
-            const overlay = document.getElementById('guideOverlay');
-            overlay.classList.toggle('active');
-        }
-
-        function switchTab(tabId, element) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-            document.getElementById(tabId).classList.add('active');
-            element.classList.add('active');
-
-            if (tabId === 'tab-checkout') {
-                updateReportSummary();
-                resizeCanvas();
-            }
-            if (tabId === 'tab-routines') {
-                renderRoutinesEditor();
+            const played = triggerBeepAlarm();
+            if (played) {
+                Toast.success('🔊 Alarme testado com sucesso!');
+            } else {
+                Toast.warning('⚠️ Áudio indisponível.');
             }
         }
 
         // ========================================
-        // LINHA DO TEMPO (CONSTRUÇÃO REATIVA)
+        // RELÓGIO E ALARMES AUTOMÁTICOS
         // ========================================
-        function renderTimeline() {
-            const container = document.getElementById('timelineList');
-            container.innerHTML = '';
+        let alarmInterval = null;
 
-            const isAppleDevice = isIOS();
+        function startAlarmChecker() {
+            if (alarmInterval) clearInterval(alarmInterval);
+            
+            alarmInterval = setInterval(() => {
+                const now = new Date();
+                const timeStr = String(now.getHours()).padStart(2, '0') + ':' + 
+                               String(now.getMinutes()).padStart(2, '0');
+                
+                appState.blocks.forEach((block) => {
+                    if (block.alarmTime === timeStr && !block.alarmTriggered) {
+                        block.alarmTriggered = true;
+                        saveState();
+                        triggerBeepAlarm();
+                        Toast.warning(
+                            `🔔 ALARME CRÍTICO\n\n📌 ${block.title}\n⏰ ${block.alarmTime}\n\nVerifique as obrigações!`,
+                            8000
+                        );
+                    }
+                    
+                    if (timeStr === '00:00') {
+                        block.alarmTriggered = false;
+                    }
+                });
+            }, 30000);
+        }
 
-            if (appState.blocks.length === 0) {
-                container.innerHTML = `
-                    <div class="report-view" style="text-align:center; padding:32px 16px;">
-                        <span style="font-size:2rem;">⚙️</span>
-                        <p style="margin-top:8px; color:var(--text-secondary);">Nenhuma rotina configurada para hoje. Acesse a aba "Rotinas" acima para criar seus blocos de trabalho.</p>
-                    </div>
-                `;
+        // ========================================
+        // ALARMES NATIVOS - VERSÃO COMPLETA
+        // ========================================
+        
+        function downloadIcalEvent(blockId) {
+            const block = appState.blocks.find(b => b.id === blockId);
+            if (!block) {
+                Toast.error('Bloco não encontrado.');
                 return;
             }
 
-            appState.blocks.forEach((block, bIdx) => {
-                const blockDiv = document.createElement('div');
-                blockDiv.className = `time-block ${block.colorClass}`;
-
-                // Lista de Checkboxes
-                let tasksHtml = '';
-                block.tasks.forEach((task, tIdx) => {
-                    tasksHtml += `
-                        <label class="task-item">
-                            <input type="checkbox" ${task.checked ? 'checked' : ''} onchange="toggleTask(${bIdx}, ${tIdx})">
-                            <span>${escapeHtml(task.text)}</span>
-                        </label>
-                    `;
-                });
-
-                const photoSrcHtml = block.photoData ? `<img src="${block.photoData}">` : '📷';
-
-                // Botão de Intent Android (ocultado no iOS)
-                const androidAlarmButton = !isAppleDevice ? 
-                    `<button class="btn btn-sync-action" onclick="launchAndroidAlarm(${bIdx})" title="Configurar alarme nativo no Android">⏰ Despertador (Android)</button>` : '';
-
-                blockDiv.innerHTML = `
-                    <div class="block-header">
-                        <div class="block-meta">
-                            <span class="block-title">${escapeHtml(block.title)}</span>
-                            <span class="block-time">🕒 Horário: ${block.time}</span>
-                        </div>
-                        <span class="block-alarm-badge">🔔 Alerta: ${block.alarmTime}</span>
-                    </div>
-
-                    <div class="task-list">
-                        <strong style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Checklist de Campo:</strong>
-                        ${tasksHtml || '<span style="color:var(--text-secondary); font-size:0.75rem;">Nenhuma tarefa cadastrada.</span>'}
-                    </div>
-
-                    <div class="block-native-sync">
-                        <strong style="font-size:0.7rem; color:var(--text-secondary); width:100%; text-transform:uppercase; margin-bottom:2px;">Prevenção (Despertador Físico Opcional):</strong>
-                        <button class="btn btn-sync-action" onclick="downloadIcalEvent(${bIdx})" title="Adicionar lembrete no calendário do celular">📅 Agenda Celular (iCal)</button>
-                        ${androidAlarmButton}
-                    </div>
-
-                    <div class="photo-area">
-                        <div class="photo-preview" id="preview-${block.id}">
-                            ${photoSrcHtml}
-                        </div>
-                        <div style="display:flex; flex-direction:column; gap:4px; flex:1;">
-                            <span style="font-size:0.7rem; color:var(--text-secondary); font-weight:bold;">Registro Fotográfico (Controle de Danos)</span>
-                            <label class="btn-upload" style="align-self: flex-start;">
-                                Carregar Imagem
-                                <input type="file" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event, ${bIdx})">
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-row" style="display: flex; flex-direction:column; gap:4px;">
-                        <label style="font-size:0.7rem; color:var(--text-secondary); font-weight:bold; text-transform:uppercase;">Anotações de Ocorrência:</label>
-                        <input type="text" class="in-desc" value="${escapeHtml(block.notes)}" placeholder="Ex: Risco encontrado no vidro..." oninput="updateNotes(${bIdx}, this.value)" style="background-color: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); padding:8px; border-radius:6px; font-size:0.8rem; outline:none; font-family: var(--font-family);">
-                    </div>
-                `;
-
-                container.appendChild(blockDiv);
-            });
-        }
-
-        // ========================================
-        // ENGENHARIA DE EXPORTAÇÃO DE ALARMES NATIVOS
-        // ========================================
-        function downloadIcalEvent(bIdx) {
-            const block = appState.blocks[bIdx];
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -1103,79 +1753,334 @@
             
             const [hour, minute] = block.alarmTime.split(':');
             const startStr = `${year}${month}${day}T${hour}${minute}00`;
-            const endStr = `${year}${month}${day}T${hour}${String(parseInt(minute) + 15).padStart(2, '0')}00`; 
+            
+            let endMin = parseInt(minute) + 15;
+            let endHour = parseInt(hour);
+            if (endMin >= 60) { endMin -= 60; endHour += 1; }
+            const endStr = `${year}${month}${day}T${String(endHour).padStart(2, '0')}${String(endMin).padStart(2, '0')}00`;
+
+            const taskList = block.tasks.map(t => '• ' + t.text).join('\\n');
+            const notes = block.notes ? `\\n\\nAnotações: ${block.notes}` : '';
 
             const icsContent = [
-                "BEGIN:VCALENDAR",
-                "VERSION:2.0",
-                "PRODID:-//Ag_IFE//Smart Agenda Pós-Obra//BR",
-                "BEGIN:VEVENT",
-                `UID:event_${block.id}_${Date.now()}@ag_ife.app`,
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Ag_IFE//v4.4//BR',
+                'CALSCALE:GREGORIAN',
+                'BEGIN:VEVENT',
+                `UID:${block.id}_${Date.now()}@ag_ife`,
                 `DTSTAMP:${year}${month}${day}T000000Z`,
                 `DTSTART:${startStr}`,
                 `DTEND:${endStr}`,
-                `SUMMARY:Ag_IFE: ${block.title}`,
-                `DESCRIPTION:Ação de engenharia pós-obra. Valide os checklists no app.`,
-                "BEGIN:VALARM",
-                "TRIGGER:-PT0M", 
-                "ACTION:DISPLAY",
-                "DESCRIPTION:Lembrete de Alerta Crítico Ag_IFE",
-                "END:VALARM",
-                "END:VEVENT",
-                "END:VCALENDAR"
-            ].join("\r\n");
+                `SUMMARY:🔔 Ag_IFE - ${block.title}`,
+                `DESCRIPTION:Tarefas:\\n${taskList}${notes}\\n\\nAção de engenharia pós-obra.`,
+                'BEGIN:VALARM',
+                'TRIGGER:-PT5M',
+                'ACTION:DISPLAY',
+                'DESCRIPTION:Lembrete: ${block.title} em 5 min',
+                'END:VALARM',
+                'BEGIN:VALARM',
+                'TRIGGER:-PT0M',
+                'ACTION:DISPLAY',
+                'DESCRIPTION:🔔 ALARME AG_IFE - ${block.title}',
+                'END:VALARM',
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
 
-            const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
-            const url = URL.createObjectURL(blob);
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.href = url;
-            downloadAnchor.download = `Alerta_Ag_IFE_${block.id}.ics`;
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            document.body.removeChild(downloadAnchor);
-            URL.revokeObjectURL(url);
+            try {
+                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `Ag_IFE_${block.title.replace(/[^a-z0-9]/gi, '_')}_${block.alarmTime.replace(':', 'h')}.ics`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setTimeout(() => URL.revokeObjectURL(url), 2000);
+                Toast.success('📅 Calendário com alarme gerado!', 3000);
+                Toast.info('💡 Abra o arquivo para adicionar ao calendário.', 4000);
+            } catch (e) {
+                Toast.error('Erro ao gerar calendário.');
+                console.error('iCal error:', e);
+            }
         }
 
-        function launchAndroidAlarm(bIdx) {
-            const block = appState.blocks[bIdx];
+        /**
+         * FUNÇÃO PRINCIPAL DE ALARME ANDROID
+         * Funciona em: file://, servidor HTTP, GitHub Pages
+         */
+        function launchAndroidAlarm(blockId) {
+            const block = appState.blocks.find(b => b.id === blockId);
+            if (!block) {
+                Toast.error('Bloco não encontrado.');
+                return;
+            }
+
+            if (!Platform.isAndroid()) {
+                Toast.warning('⚠️ Função específica para Android.');
+                return;
+            }
+
             const [hour, minute] = block.alarmTime.split(':');
-            const message = encodeURIComponent(`Ag_IFE: ${block.title}`);
-            // CORREÇÃO: Adicionado o delimitador "//" após o protocolo intent para compatibilidade com Chrome/Samsung Internet
-            const intentUrl = `intent://#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR=${parseInt(hour)};i.android.intent.extra.alarm.MINUTES=${parseInt(minute)};S.android.intent.extra.alarm.MESSAGE=${message};S.android.intent.extra.alarm.SKIP_UI=false;end`;
-            window.location.href = intentUrl;
+            const hourNum = parseInt(hour);
+            const minuteNum = parseInt(minute);
+            
+            // ====== TENTAR INTENT ======
+            const intentUrl = `intent://#Intent;` +
+                `action=android.intent.action.SET_ALARM;` +
+                `i.android.intent.extra.alarm.HOUR=${hourNum};` +
+                `i.android.intent.extra.alarm.MINUTES=${minuteNum};` +
+                `S.android.intent.extra.alarm.MESSAGE=${encodeURIComponent('Ag_IFE: ' + block.title)};` +
+                `S.android.intent.extra.alarm.SKIP_UI=false;` +
+                `end`;
+
+            let success = false;
+
+            // Método 1: iframe
+            try {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = intentUrl;
+                document.body.appendChild(iframe);
+                setTimeout(() => { if (iframe.parentElement) iframe.remove(); }, 3000);
+                success = true;
+            } catch (e) {}
+
+            // Método 2: link click
+            if (!success) {
+                try {
+                    const link = document.createElement('a');
+                    link.href = intentUrl;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    success = true;
+                } catch (e) {}
+            }
+
+            // Método 3: window.location
+            if (!success) {
+                try {
+                    window.location.href = intentUrl;
+                    success = true;
+                } catch (e) {}
+            }
+
+            if (success) {
+                Toast.info(`⏰ Abrindo configuração para ${block.alarmTime}...`, 3000);
+                Toast.info(`📌 ${truncateText(block.title, 35)}`, 4000);
+                return;
+            }
+
+            // ====== FALLBACK: file:// ou Intent bloqueado ======
+            // Copiar dados para área de transferência
+            const copyText = 
+                `📋 AG_IFE - ALARME MANUAL\n` +
+                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                `📌 Título: ${block.title}\n` +
+                `⏰ Horário: ${block.alarmTime}\n` +
+                `📅 Data: ${new Date().toLocaleDateString('pt-BR')}\n` +
+                `📋 Tarefas: ${block.tasks.map(t => t.text).join(', ')}\n` +
+                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+                `💡 Configure manualmente no relógio do celular.`;
+
+            // Tentar copy via Clipboard API
+            let copied = false;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(copyText).then(() => {
+                        copied = true;
+                        Toast.success('📋 Dados copiados para área de transferência!', 2500);
+                    }).catch(() => {
+                        // Fallback para prompt
+                        showManualPrompt(copyText);
+                    });
+                } else {
+                    // Fallback para navegadores antigos
+                    showManualPrompt(copyText);
+                }
+            } catch (e) {
+                showManualPrompt(copyText);
+            }
+
+            // Exibir mensagem principal
+            Toast.warning(
+                `⚠️ Não foi possível abrir o alarme automaticamente.\n\n` +
+                `📌 Configure MANUALMENTE:\n` +
+                `   ⏰ ${block.alarmTime}\n` +
+                `   📋 ${truncateText(block.title, 40)}\n\n` +
+                `💡 Use "📅 Agenda" para alarme garantido via calendário.`,
+                8000
+            );
+
+            // Dica adicional após alguns segundos
+            setTimeout(() => {
+                Toast.info('💡 Toque em "📅 Agenda" para criar evento com alarme garantido.', 5000);
+            }, 2000);
+        }
+
+        /**
+         * Mostra prompt para copiar dados manualmente
+         */
+        function showManualPrompt(copyText) {
+            try {
+                const textarea = document.createElement('textarea');
+                textarea.value = copyText;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                textarea.style.pointerEvents = 'none';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    Toast.success('📋 Dados copiados!', 2000);
+                } catch (e) {
+                    prompt('Copie os dados abaixo:', copyText);
+                }
+                document.body.removeChild(textarea);
+            } catch (e) {
+                prompt('Copie os dados abaixo:', copyText);
+            }
         }
 
         // ========================================
-        // CONTROLES DE CHECKLIST & FOTO
+        // RENDER: TIMELINE
         // ========================================
-        function toggleTask(bIdx, tIdx) {
-            appState.blocks[bIdx].tasks[tIdx].checked = !appState.blocks[bIdx].tasks[tIdx].checked;
-            saveStateToStorage();
-        }
+        function renderTimeline() {
+            const container = document.getElementById('timelineList');
+            container.innerHTML = '';
 
-        function updateNotes(bIdx, text) {
-            appState.blocks[bIdx].notes = text;
-            saveStateToStorage();
-        }
+            if (appState.blocks.length === 0) {
+                container.innerHTML = `
+                    <div class="report-view text-center" style="padding:24px 16px;">
+                        <span style="font-size:2rem;">⚙️</span>
+                        <p style="margin-top:6px; color:var(--text-secondary); font-size:0.78rem;">
+                            Nenhuma rotina configurada.<br>
+                            Acesse a aba "Rotinas" para criar.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
 
-        function handlePhotoUpload(event, bIdx) {
-            const file = event.target.files[0];
-            if (!file) return;
+            const isAndroid = Platform.isAndroid();
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64 = e.target.result;
-                appState.blocks[bIdx].photoData = base64;
-                saveStateToStorage();
-                
-                const preview = document.getElementById(`preview-${appState.blocks[bIdx].id}`);
-                preview.innerHTML = `<img src="${base64}">`;
-            };
-            reader.readAsDataURL(file);
+            appState.blocks.forEach((block) => {
+                const div = document.createElement('div');
+                div.className = `time-block ${block.colorClass}`;
+                div.id = `block-${block.id}`;
+
+                // Tasks
+                let tasksHtml = '';
+                if (block.tasks && block.tasks.length > 0) {
+                    block.tasks.forEach((task, tIdx) => {
+                        const checked = task.checked ? 'checked' : '';
+                        const cls = task.checked ? 'task-item checked' : 'task-item';
+                        tasksHtml += `
+                            <label class="${cls}">
+                                <input type="checkbox" ${checked} onchange="toggleTask('${block.id}', ${tIdx})">
+                                <span>${escapeHtml(task.text)}</span>
+                            </label>
+                        `;
+                    });
+                } else {
+                    tasksHtml = `<span class="task-empty">Nenhuma tarefa cadastrada.</span>`;
+                }
+
+                // Photo
+                const photoHtml = block.photoData ? 
+                    `<img src="${block.photoData}" alt="Foto">` : 
+                    '📷';
+                const photoClass = block.photoData ? 'photo-area has-photo' : 'photo-area';
+
+                // Botão Android (apenas para Android)
+                const androidBtn = isAndroid ? 
+                    `<button class="btn-action android-alarm" onclick="launchAndroidAlarm('${block.id}')">⏰ Despertador</button>` : 
+                    '';
+
+                div.innerHTML = `
+                    <div class="block-header">
+                        <div class="block-meta">
+                            <span class="block-title">${escapeHtml(block.title)}</span>
+                            <span class="block-time">🕒 ${escapeHtml(block.time)}</span>
+                        </div>
+                        <span class="block-alarm-badge">🔔 ${escapeHtml(block.alarmTime)}</span>
+                    </div>
+
+                    <div class="task-list">
+                        <span class="task-list-label">✓ Checklist</span>
+                        ${tasksHtml}
+                    </div>
+
+                    <div class="block-actions">
+                        <button class="btn-action" onclick="downloadIcalEvent('${block.id}')">📅 Agenda</button>
+                        ${androidBtn}
+                    </div>
+
+                    <div class="${photoClass}">
+                        <div class="photo-preview" id="preview-${block.id}">
+                            ${photoHtml}
+                        </div>
+                        <div class="photo-info">
+                            <span class="photo-info-label">📸 Registro Fotográfico</span>
+                            <label class="btn-upload">
+                                Carregar
+                                <input type="file" accept="image/*" style="display:none;" 
+                                       onchange="handlePhotoUpload(event, '${block.id}')">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label style="font-size:0.6rem; color:var(--text-secondary); font-weight:600; text-transform:uppercase;">
+                            📝 Anotações
+                        </label>
+                        <input type="text" class="notes-input" 
+                               value="${escapeHtml(block.notes)}" 
+                               placeholder="Ex: Risco encontrado..." 
+                               oninput="updateNotes('${block.id}', this.value)">
+                    </div>
+                `;
+
+                container.appendChild(div);
+            });
         }
 
         // ========================================
-        // GESTÃO DINÂMICA DE ROTINAS (CRUD VS4)
+        // RENDER: INVENTÁRIO
+        // ========================================
+        function renderInventory() {
+            const container = document.getElementById('inventoryList');
+            container.innerHTML = '';
+
+            if (!appState.inventory || appState.inventory.length === 0) {
+                container.innerHTML = `
+                    <div class="report-view text-center" style="padding:16px;">
+                        <p class="text-secondary">Nenhum item cadastrado.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            appState.inventory.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'inventory-card';
+                div.innerHTML = `
+                    <div class="inventory-info">
+                        <span class="inventory-name">${escapeHtml(item.name)}</span>
+                        <span class="inventory-desc">${escapeHtml(item.desc)}</span>
+                    </div>
+                    <input type="checkbox" ${item.checked ? 'checked' : ''} 
+                           onchange="toggleInventory(${idx})">
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // ========================================
+        // RENDER: ROTINAS EDITOR
         // ========================================
         function renderRoutinesEditor() {
             const container = document.getElementById('routineEditorList');
@@ -1183,7 +2088,9 @@
 
             if (appState.blocks.length === 0) {
                 container.innerHTML = `
-                    <p style="text-align:center; font-size:0.75rem; color:var(--text-secondary); margin-top:12px;">Crie seu primeiro bloco usando o formulário acima.</p>
+                    <p class="text-secondary text-center" style="font-size:0.7rem; padding:8px;">
+                        Crie seu primeiro bloco acima.
+                    </p>
                 `;
                 return;
             }
@@ -1192,33 +2099,41 @@
                 const card = document.createElement('div');
                 card.className = 'editor-block-card';
 
-                // Renderiza sub-lista de tarefas para exclusão individual
                 let tasksHtml = '';
-                block.tasks.forEach((task, tIdx) => {
-                    tasksHtml += `
-                        <div class="editor-task-row">
-                            <span>- ${escapeHtml(task.text)}</span>
-                            <button class="btn btn-secondary btn-xs" onclick="removeTaskFromBlock(${bIdx}, ${tIdx})" style="color:var(--color-red); border-color: rgba(239, 68, 68, 0.2);">✕</button>
-                        </div>
-                    `;
-                });
+                if (block.tasks && block.tasks.length > 0) {
+                    block.tasks.forEach((task, tIdx) => {
+                        tasksHtml += `
+                            <div class="editor-task-row">
+                                <span class="editor-task-text">
+                                    <span class="task-bullet">●</span>
+                                    ${escapeHtml(task.text)}
+                                </span>
+                                <button class="btn btn-danger btn-xs" onclick="removeTaskFromBlock(${bIdx}, ${tIdx})">✕</button>
+                            </div>
+                        `;
+                    });
+                } else {
+                    tasksHtml = `<span class="text-secondary" style="font-size:0.65rem;">Nenhuma tarefa.</span>`;
+                }
 
                 card.innerHTML = `
                     <div class="editor-block-header">
-                        <div>
-                            <strong style="font-size:0.85rem;">${escapeHtml(block.title)}</strong>
-                            <div style="font-size:0.7rem; color:var(--text-secondary);">${block.time} | Alarme: ${block.alarmTime}</div>
+                        <div class="editor-block-info">
+                            <span class="editor-block-title">${escapeHtml(block.title)}</span>
+                            <span class="editor-block-meta">${escapeHtml(block.time)} | Alarme: ${escapeHtml(block.alarmTime)}</span>
                         </div>
-                        <button class="btn btn-danger btn-xs" onclick="removeBlock(${bIdx})">🗑️ Remover</button>
+                        <button class="btn btn-danger btn-xs" onclick="removeBlock(${bIdx})">🗑️</button>
                     </div>
 
                     <div class="editor-tasks-container">
-                        <strong style="font-size:0.7rem; color:var(--text-secondary); text-transform:uppercase;">Checklist das Atividades:</strong>
-                        ${tasksHtml || '<span style="font-size:0.7rem; color:var(--text-secondary);">Nenhuma tarefa adicionada.</span>'}
+                        <span style="font-size:0.6rem; color:var(--text-secondary); text-transform:uppercase; font-weight:600;">
+                            ✅ Atividades
+                        </span>
+                        ${tasksHtml}
                         
-                        <div class="form-row" style="flex-direction:row; gap:4px; margin-top:6px;">
-                            <input type="text" id="taskInput-${block.id}" placeholder="Escreva uma nova tarefa..." style="flex:1; padding:6px; font-size:0.75rem;">
-                            <button class="btn btn-gold btn-xs" onclick="addTaskToBlock(${bIdx})">➕ Add</button>
+                        <div class="editor-task-add">
+                            <input type="text" id="taskInput-${block.id}" placeholder="Nova tarefa...">
+                            <button class="btn btn-gold btn-xs" onclick="addTaskToBlock(${bIdx})">➕</button>
                         </div>
                     </div>
                 `;
@@ -1227,30 +2142,144 @@
             });
         }
 
+        // ========================================
+        // RENDER: RELATÓRIO
+        // ========================================
+        function updateReport() {
+            const summary = document.getElementById('reportSummary');
+            
+            let total = 0, done = 0;
+            let occurrences = [];
+
+            appState.blocks.forEach(b => {
+                if (b.tasks) {
+                    b.tasks.forEach(t => {
+                        total++;
+                        if (t.checked) done++;
+                    });
+                }
+                if (b.notes && b.notes.trim()) {
+                    occurrences.push(`📌 ${b.title}: ${b.notes.trim()}`);
+                }
+            });
+
+            const activeItems = appState.inventory.filter(i => i.checked).map(i => i.name);
+            const activeStr = activeItems.length > 0 ? activeItems.join(', ') : 'Nenhum';
+
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+            summary.textContent = 
+`📋 RELATÓRIO TÉCNICO - Ag_IFE ${APP_VERSION}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 Data: ${new Date().toLocaleDateString('pt-BR')}
+⏰ Hora: ${new Date().toLocaleTimeString('pt-BR')}
+
+📊 PROGRESSO:
+   ${done} de ${total} tarefas concluídas
+   ${pct}% de aproveitamento
+
+🔧 EQUIPAMENTOS ATIVOS:
+   ${activeStr}
+
+📝 OCORRÊNCIAS:
+   ${occurrences.length > 0 ? occurrences.join('\n   ') : 'Nenhuma'}
+
+✍️ ASSINATURA:
+   ${appState.signed ? '✅ CONFORMIDADE ASSINADA' : '⏳ PENDENTE'}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+        }
+
+        // ========================================
+        // FUNÇÕES DE CONTROLE
+        // ========================================
+        function toggleTask(blockId, tIdx) {
+            const block = appState.blocks.find(b => b.id === blockId);
+            if (block && block.tasks && block.tasks[tIdx]) {
+                block.tasks[tIdx].checked = !block.tasks[tIdx].checked;
+                saveState();
+                
+                const taskItem = document.querySelector(`#block-${blockId} .task-item:nth-child(${tIdx + 1})`);
+                if (taskItem) {
+                    const cb = taskItem.querySelector('input[type="checkbox"]');
+                    if (cb) cb.checked = block.tasks[tIdx].checked;
+                    taskItem.classList.toggle('checked', block.tasks[tIdx].checked);
+                }
+            }
+        }
+
+        function updateNotes(blockId, text) {
+            const block = appState.blocks.find(b => b.id === blockId);
+            if (block) {
+                block.notes = sanitizeString(text);
+                saveState();
+            }
+        }
+
+        function handlePhotoUpload(event, blockId) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                Toast.error('📸 Imagem muito grande! Máximo 5MB.');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const base64 = e.target.result;
+                    const block = appState.blocks.find(b => b.id === blockId);
+                    if (block) {
+                        block.photoData = base64;
+                        saveState();
+                        
+                        const preview = document.getElementById(`preview-${blockId}`);
+                        if (preview) {
+                            preview.innerHTML = `<img src="${base64}" alt="Foto">`;
+                        }
+                        
+                        const photoArea = preview?.closest('.photo-area');
+                        if (photoArea) {
+                            photoArea.classList.add('has-photo');
+                        }
+                        
+                        Toast.success('📸 Imagem carregada!');
+                    }
+                } catch (err) {
+                    Toast.error('Erro ao processar imagem.');
+                }
+            };
+            reader.onerror = function() {
+                Toast.error('Erro ao ler arquivo.');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ========================================
+        // FUNÇÕES: ROTINAS
+        // ========================================
         function addNewBlock() {
             const titleInput = document.getElementById('newBlockTitle');
             const timeInput = document.getElementById('newBlockTime');
             const alarmInput = document.getElementById('newBlockAlarm');
             const colorInput = document.getElementById('newBlockColor');
 
-            const title = titleInput.value.trim();
-            const time = timeInput.value.trim();
-            const alarm = alarmInput.value.trim();
+            const title = sanitizeString(titleInput.value);
+            const time = sanitizeString(timeInput.value);
+            const alarm = alarmInput.value;
             const colorClass = colorInput.value;
 
-            if (!title || !time || !alarm) {
-                alert("Por favor, preencha todos os campos para criar o bloco.");
-                return;
-            }
-
-            const timePattern = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-            if (!timePattern.test(alarm)) {
-                alert("O horário de despertador deve estar no formato de relógio válido de 24h (HH:MM). Ex: 07:30");
-                return;
+            if (!title) { Toast.warning('Informe o título.'); titleInput.focus(); return; }
+            if (!time) { Toast.warning('Informe a vigência.'); timeInput.focus(); return; }
+            if (!alarm || !isValidTime(alarm)) { 
+                Toast.warning('Selecione um horário válido.'); 
+                alarmInput.focus(); 
+                return; 
             }
 
             const newBlock = {
-                id: 'block_' + Date.now(),
+                id: generateId(),
                 title: title,
                 time: time,
                 colorClass: colorClass,
@@ -1262,334 +2291,341 @@
             };
 
             appState.blocks.push(newBlock);
-            saveStateToStorage();
+            saveState();
             
             titleInput.value = '';
             timeInput.value = '';
             alarmInput.value = '';
 
-            renderRoutinesEditor();
             renderTimeline();
-            alert("✅ Bloco de Rotina adicionado com sucesso!");
+            renderRoutinesEditor();
+            Toast.success('✅ Bloco criado!');
         }
 
         function removeBlock(bIdx) {
-            if (confirm("Deseja mesmo excluir esta rotina inteira e suas tarefas associadas?")) {
+            if (bIdx < 0 || bIdx >= appState.blocks.length) return;
+            const title = appState.blocks[bIdx].title;
+            if (confirm(`Excluir "${title}" e todas as tarefas?`)) {
                 appState.blocks.splice(bIdx, 1);
-                saveStateToStorage();
-                renderRoutinesEditor();
+                saveState();
                 renderTimeline();
+                renderRoutinesEditor();
+                Toast.info(`🗑️ "${title}" removido.`);
             }
         }
 
         function addTaskToBlock(bIdx) {
+            if (bIdx < 0 || bIdx >= appState.blocks.length) return;
             const block = appState.blocks[bIdx];
             const input = document.getElementById(`taskInput-${block.id}`);
-            const text = input.value.trim();
-
-            if (!text) {
-                alert("Por favor, escreva a descrição da atividade.");
-                return;
-            }
+            if (!input) return;
+            
+            const text = sanitizeString(input.value);
+            if (!text) { Toast.warning('Escreva a atividade.'); input.focus(); return; }
 
             block.tasks.push({ text: text, checked: false });
-            saveStateToStorage();
+            saveState();
             input.value = '';
 
-            renderRoutinesEditor();
             renderTimeline();
+            renderRoutinesEditor();
+            Toast.success('✅ Tarefa adicionada!');
         }
 
         function removeTaskFromBlock(bIdx, tIdx) {
+            if (bIdx < 0 || bIdx >= appState.blocks.length) return;
+            if (tIdx < 0 || tIdx >= appState.blocks[bIdx].tasks.length) return;
+            
             appState.blocks[bIdx].tasks.splice(tIdx, 1);
-            saveStateToStorage();
-            renderRoutinesEditor();
+            saveState();
             renderTimeline();
+            renderRoutinesEditor();
         }
 
         // ========================================
-        // ABA INVENTÁRIO
+        // FUNÇÕES: INVENTÁRIO
         // ========================================
-        function renderInventory() {
-            const container = document.getElementById('inventoryList');
-            container.innerHTML = '';
-
-            appState.inventory.forEach((item, idx) => {
-                const div = document.createElement('div');
-                div.className = 'inventory-card';
-
-                div.innerHTML = `
-                    <div class="inventory-info">
-                        <span class="inventory-name">${escapeHtml(item.name)}</span>
-                        <span class="inventory-desc">${escapeHtml(item.desc)}</span>
-                    </div>
-                    <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleInventory(${idx})" style="width:18px; height:18px; accent-color:var(--color-gold); cursor:pointer;">
-                `;
-                container.appendChild(div);
-            });
-        }
-
         function toggleInventory(idx) {
+            if (idx < 0 || idx >= appState.inventory.length) return;
             appState.inventory[idx].checked = !appState.inventory[idx].checked;
-            saveStateToStorage();
+            saveState();
         }
 
         // ========================================
-        // ENGINE DE RELÓGIO E DISPARO DE ALERTAS
+        // CANVAS: ASSINATURA
         // ========================================
-        function startClockCheck() {
-            setInterval(() => {
-                const now = new Date();
-                const curTimeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-                
-                appState.blocks.forEach(block => {
-                    if (block.alarmTime === curTimeStr && !block.alarmTriggered) {
-                        block.alarmTriggered = true;
-                        triggerBeepAlarm();
-                        saveStateToStorage();
-                        alert(`🔔 ALARME DE CRITICIDADE - Ag_IFE:\n\nHora: ${block.alarmTime}\nBloco: ${block.title}\n\nVerifique as obrigações deste período.`);
-                    }
-                    
-                    if (curTimeStr === "00:00") {
-                        block.alarmTriggered = false;
-                    }
-                });
-            }, 30000); 
-        }
+        let canvas, ctx, isDrawing = false;
 
-        // ========================================
-        // CANVAS: PAD DE ASSINATURA ELETRÔNICA
-        // ========================================
-        function initSignaturePad() {
+        function initCanvas() {
             canvas = document.getElementById('signatureCanvas');
+            if (!canvas) return;
+            
             ctx = canvas.getContext('2d');
+            
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = Math.max(rect.width - 32, 200);
+            canvas.height = 140;
+            
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = '#fbbf24';
             
             canvas.addEventListener('mousedown', startDraw);
             canvas.addEventListener('mousemove', draw);
             canvas.addEventListener('mouseup', stopDraw);
             canvas.addEventListener('mouseleave', stopDraw);
-
-            canvas.addEventListener('touchstart', startDrawTouch, {passive: false});
-            canvas.addEventListener('touchmove', drawTouch, {passive: false});
-            canvas.addEventListener('touchend', stopDraw);
-
-            window.addEventListener('resize', resizeCanvas);
+            
+            canvas.addEventListener('touchstart', startDrawTouch, { passive: false });
+            canvas.addEventListener('touchmove', drawTouch, { passive: false });
+            canvas.addEventListener('touchend', stopDrawTouch, { passive: false });
             
             if (appState.signatureData) {
                 const img = new Image();
                 img.onload = function() {
-                    ctx.drawImage(img, 0, 0);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 };
                 img.src = appState.signatureData;
             }
+            
+            window.addEventListener('resize', resizeCanvas);
         }
 
         function resizeCanvas() {
-            if (!canvas) return;
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width;
-            canvas.height = rect.height;
+            if (!canvas || !ctx) return;
             
-            if (appState.signatureData) {
+            const data = canvas.toDataURL();
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = Math.max(rect.width - 32, 200);
+            canvas.height = 140;
+            
+            if (data && data !== 'data:,') {
                 const img = new Image();
                 img.onload = function() {
-                    ctx.drawImage(img, 0, 0);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 };
-                img.src = appState.signatureData;
-            } else {
-                clearSignature();
+                img.src = data;
+            }
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX - rect.left) * (canvas.width / rect.width),
+                y: (e.clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+
+        function getTouchPos(e) {
+            if (!e.touches || e.touches.length === 0) return { x: 0, y: 0 };
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            return {
+                x: (touch.clientX - rect.left) * (canvas.width / rect.width),
+                y: (touch.clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+
+        function startDraw(e) {
+            e.preventDefault();
+            isDrawing = true;
+            const pos = getMousePos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const pos = getMousePos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function startDrawTouch(e) {
+            e.preventDefault();
+            isDrawing = true;
+            const pos = getTouchPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function drawTouch(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const pos = getTouchPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDraw() { isDrawing = false; }
+        function stopDrawTouch(e) { e.preventDefault(); isDrawing = false; }
+
+        function clearSignature() {
+            if (!canvas || !ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            appState.signatureData = null;
+            appState.signed = false;
+            saveState();
+            updateReport();
+            Toast.info('🖊️ Assinatura limpa.');
+        }
+
+        function saveSignatureState() {
+            if (!canvas) return;
+            try {
+                appState.signatureData = canvas.toDataURL('image/png');
+                appState.signed = true;
+                saveState();
+                updateReport();
+                Toast.success('✅ Assinatura salva!');
+            } catch (e) {
+                Toast.error('Erro ao salvar assinatura.');
             }
         }
 
         // ========================================
-        // GERADOR DE RELATÓRIO TÉCNICO DIÁRIO
+        // EXPORTAÇÃO
         // ========================================
-        function updateReportSummary() {
-            const summary = document.getElementById('reportSummary');
-            let tasksCompleted = 0;
-            let tasksTotal = 0;
-
-            appState.blocks.forEach(b => {
-                b.tasks.forEach(t => {
-                    tasksTotal++;
-                    if (t.checked) tasksCompleted++;
-                });
-            });
-
-            let activeEquipments = appState.inventory.filter(i => i.checked).map(i => i.name).join(', ') || 'Nenhum ativado';
-
-            let occurrencesText = '';
-            appState.blocks.forEach(b => {
-                if (b.notes) {
-                    occurrencesText += `\n* Bloco: ${b.title}: ${b.notes}`;
-                }
-            });
-
-            summary.innerHTML = `
-DIÁRIO DE OBRAS TECNICO - FCI/Ag_IFE
------------------------------------------
-Data da Auditoria: ${new Date().toLocaleDateString('pt-BR')}
-Executante: Especialista em Entrega de Obras
-Aproveitamento: ${tasksCompleted} de ${tasksTotal} tarefas executadas.
-Equipamentos Ativos: ${activeEquipments}
-Ocorrências em Campo: ${occurrencesText || 'Nenhuma anormalidade registrada.'}
-Assinatura Digital Ativa: ${appState.signed ? 'CONFORMIDADE ASSINADA' : 'PENDENTE DE TRAÇO'}
------------------------------------------
-            `;
-        }
-
         function exportDailyReportText() {
-            updateReportSummary();
-            const text = document.getElementById('reportSummary').textContent;
+            updateReport();
+            const summary = document.getElementById('reportSummary');
+            const text = summary.textContent;
             
             try {
-                const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(text);
-                const downloadAnchor = document.createElement('a');
-                downloadAnchor.setAttribute("href", dataStr);
-                downloadAnchor.setAttribute("download", `Ag_IFE_Relatorio_Diario_${Date.now()}.txt`);
-                document.body.appendChild(downloadAnchor);
-                downloadAnchor.click();
-                downloadAnchor.remove();
-            } catch (err) {
-                alert("Erro ao exportar arquivo de texto.");
+                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `Ag_IFE_Relatorio_${new Date().toISOString().slice(0,10)}.txt`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setTimeout(() => URL.revokeObjectURL(url), 2000);
+                Toast.success('📥 Relatório exportado!');
+            } catch (e) {
+                Toast.error('Erro ao exportar.');
             }
         }
 
         // ========================================
-        // PERSISTÊNCIA DE DADOS (LOCAL STORAGE SEGURO)
+        // LIMPEZA
         // ========================================
-        function saveStateToStorage() {
-            SafeStorage.setItem('ag_ife_data_v4', JSON.stringify(appState));
-        }
-
-        function loadState() {
-            const saved = SafeStorage.getItem('ag_ife_data_v4');
-            if (saved) {
-                try {
-                    appState = JSON.parse(saved);
-                } catch(e) {
-                    loadDefaultData();
-                }
-            } else {
-                loadDefaultData();
-            }
-        }
-
-        function loadDefaultData() {
-            appState.signed = false;
-            appState.signatureData = null;
-            appState.inventory = [
-                { id: "inv_1", name: "Politriz Rotativa Bosch 1200W", desc: "Verificar integridade do disco de feltro mole.", checked: false },
-                { id: "inv_2", name: "Aspirador de Micropartículas HEPA", desc: "Checar se o saco coletor está vazio.", checked: false },
-                { id: "inv_3", name: "Detergente de Ph Neutro (Bellinzoni)", desc: "Comprovação de FISPQ para mármore.", checked: false },
-                { id: "inv_4", name: "Feltros e Panos de Microfibra de 400g/m²", desc: "Zerar qualquer micro-abrasivo na área.", checked: false }
-            ];
-            
-            appState.blocks = [
-                {
-                    id: "block_1",
-                    title: "Preparação, Segurança e FISPQ",
-                    time: "07:00 - 08:30",
-                    colorClass: "block-green",
-                    alarmTime: "07:30",
-                    alarmTriggered: false,
-                    tasks: [
-                        { text: "Check-in via geolocalização na entrada do canteiro", checked: false },
-                        { text: "Validação do uso de sapato que não deixa rastro preto", checked: false },
-                        { text: "Checagem das FISPQ dos solventes do dia", checked: false }
-                    ],
-                    photoData: null,
-                    notes: ""
-                },
-                {
-                    id: "block_2",
-                    title: "Limpeza Técnica Crítica",
-                    time: "08:30 - 12:00",
-                    colorClass: "block-blue",
-                    alarmTime: "10:00",
-                    alarmTriggered: false,
-                    tasks: [
-                        { text: "Fotografar quaisquer riscos deixados por equipes anteriores", checked: false },
-                        { text: "Executar 'Spot Test' (área oculta) antes da lavagem de pedras", checked: false },
-                        { text: "Limpeza do vidro termoacústico com raspador zero-risco", checked: false }
-                    ],
-                    photoData: null,
-                    notes: ""
-                },
-                {
-                    id: "block_3",
-                    title: "Intervalo Ergonômico",
-                    time: "12:00 - 13:00",
-                    colorClass: "block-yellow",
-                    alarmTime: "12:50",
-                    alarmTriggered: false,
-                    tasks: [
-                        { text: "Retirada de EPIs de alto risco", checked: false },
-                        { text: "Pausa alimentar e hidratação preventiva", checked: false }
-                    ],
-                    photoData: null,
-                    notes: ""
-                },
-                {
-                    id: "block_4",
-                    title: "Acabamento Fino e Polimento",
-                    time: "13:00 - 16:30",
-                    colorClass: "block-orange",
-                    alarmTime: "14:30",
-                    alarmTriggered: false,
-                    tasks: [
-                        { text: "Aspiração total de pó flutuante com filtro de carvão HEPA", checked: false },
-                        { text: "Polimento de inox e metais escovados com pano seco", checked: false },
-                        { text: "Inspeção de reflexo e poeira com lanterna de alta potência", checked: false }
-                    ],
-                    photoData: null,
-                    notes: ""
-                },
-                {
-                    id: "block_5",
-                    title: "Patrimônio & Equipamentos",
-                    time: "16:30 - 17:30",
-                    colorClass: "block-purple",
-                    alarmTime: "17:00",
-                    alarmTriggered: false,
-                    tasks: [
-                        { text: "Lavagem de mangueiras e reservatórios das extratoras", checked: false },
-                        { text: "Acondicionar produtos químicos sob tranca de segurança", checked: false },
-                        { text: "Contagem física de panos e discos abrasivos", checked: false }
-                    ],
-                    photoData: null,
-                    notes: ""
-                },
-                {
-                    id: "block_6",
-                    title: "Encerramento e Assinatura Legal",
-                    time: "17:30 - 18:00",
-                    colorClass: "block-red",
-                    alarmTime: "17:50",
-                    alarmTriggered: false,
-                    tasks: [
-                        { text: "Criação de relatório de 'antes e depois' para o proprietário", checked: false },
-                        { text: "Checkout e fechamento de portões", checked: false }
-                    ],
-                    photoData: null,
-                    notes: ""
-                }
-            ];
-            saveStateToStorage();
-        }
-
         function clearAllData() {
-            if (confirm('⚠️ ALERTA EXTREMO:\n\nIsso apagará permanentemente todas as imagens anexadas, assinaturas, anotações de ocorrência e checklists efetuados hoje.\n\nDeseja realizar esta limpeza geral?')) {
-                localStorage.removeItem('ag_ife_data_v4');
-                location.reload();
+            if (confirm('⚠️ ATENÇÃO!\n\nIsso apagará TODOS os dados:\n• Assinaturas\n• Fotos\n• Checklists\n• Anotações\n\nDeseja continuar?')) {
+                try {
+                    Storage.removeItem('data_v4');
+                    Toast.info('🗑️ Dados apagados. Recarregando...', 2000);
+                    setTimeout(() => location.reload(), 1500);
+                } catch (e) {
+                    Toast.error('Erro ao apagar dados.');
+                }
             }
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        // ========================================
+        // NAVEGAÇÃO
+        // ========================================
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active');
+                el.setAttribute('aria-selected', 'false');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+            element.setAttribute('aria-selected', 'true');
+
+            if (tabId === 'tab-checkout') {
+                setTimeout(() => {
+                    updateReport();
+                    resizeCanvas();
+                }, 50);
+            }
+            if (tabId === 'tab-routines') {
+                renderRoutinesEditor();
+            }
         }
+
+        // ========================================
+        // GUIA
+        // ========================================
+        function toggleGuide() {
+            document.getElementById('guideOverlay').classList.toggle('active');
+        }
+
+        // ========================================
+        // INICIALIZAÇÃO
+        // ========================================
+        function init() {
+            console.log(`🚀 ${APP_NAME} ${APP_VERSION} iniciando...`);
+            
+            Toast.init();
+            
+            initState();
+            console.log(`📦 ${appState.blocks.length} blocos, ${appState.inventory.length} itens`);
+            
+            if (Platform.isFileProtocol()) {
+                console.warn('⚠️ Executando via file:// - Alarmes nativos usarão fallback com cópia');
+                Toast.info('📌 Modo file:// - Use "📅 Agenda" para alarme garantido.', 5000);
+            }
+            
+            renderTimeline();
+            renderInventory();
+            renderRoutinesEditor();
+            initCanvas();
+            updateReport();
+            
+            startAlarmChecker();
+            
+            // Ativar áudio no primeiro toque
+            const activateAudio = () => {
+                const ctx = getAudioContext();
+                if (ctx && ctx.state === 'suspended') {
+                    ctx.resume();
+                }
+                document.removeEventListener('touchstart', activateAudio);
+                document.removeEventListener('click', activateAudio);
+            };
+            document.addEventListener('touchstart', activateAudio, { once: true });
+            document.addEventListener('click', activateAudio, { once: true });
+            
+            console.log(`✅ ${APP_NAME} ${APP_VERSION} pronto!`);
+            
+            // Log de diagnóstico
+            if (Platform.isAndroid()) {
+                console.log('📱 Android detectado - Suporte a alarmes nativos disponível');
+            }
+            if (Platform.isIOS()) {
+                console.log('📱 iOS detectado - Usando fallback para alarmes');
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', init);
+
+        // ========================================
+        // EXPOSIÇÃO GLOBAL
+        // ========================================
+        window.switchTab = switchTab;
+        window.toggleGuide = toggleGuide;
+        window.testSynthAlarm = testSynthAlarm;
+        window.toggleTask = toggleTask;
+        window.updateNotes = updateNotes;
+        window.handlePhotoUpload = handlePhotoUpload;
+        window.downloadIcalEvent = downloadIcalEvent;
+        window.launchAndroidAlarm = launchAndroidAlarm;
+        window.addNewBlock = addNewBlock;
+        window.removeBlock = removeBlock;
+        window.addTaskToBlock = addTaskToBlock;
+        window.removeTaskFromBlock = removeTaskFromBlock;
+        window.toggleInventory = toggleInventory;
+        window.clearSignature = clearSignature;
+        window.saveSignatureState = saveSignatureState;
+        window.exportDailyReportText = exportDailyReportText;
+        window.clearAllData = clearAllData;
+        window.Platform = Platform;
     </script>
 </body>
 </html>
