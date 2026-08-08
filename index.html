@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Ag_IFE - Agenda Inteligente de Alta Engenharia</title>
+    <style>
+        /* ========================================
+           SISTEMA DE DESIGN (Luxury Theme)
+           ======================================== */
+        :root {
+            --bg-primary: #070a13;      /* Azul escuro profundo */
+            --bg-card: #0f1423;         /* Card corporativo escuro */
+            --bg-input: #171d33;
+            --border-color: #222c4a;
+            --text-primary: #f1f5f9;    /* Branco/Prata */
+            --text-secondary: #6b7c96;  /* Cinza-azul */
+            --color-gold: #fbbf24;      /* Amarelo/Dourado */
+            
+            /* Sinalização de Blocos */
+            --color-green: #10b981;     /* 🟢 Preparação / FISPQ */
+            --color-blue: #3b82f6;      /* 🔵 Técnica / Mármores */
+            --color-yellow: #eab308;    /* 🟡 Intervalo Ergonômico */
+            --color-orange: #f97316;    /* 🟠 Acabamento Fino */
+            --color-purple: #8b5cf6;    /* 🟣 Maquinário / Inventário */
+            --color-red: #ef4444;       /* 🔴 Entrega Legal */
+
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --bg-modal: rgba(7, 10, 19, 0.95);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-input: #e2ecf4;
+            --border-color: #cbd5e1;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --bg-modal: rgba(240, 244, 248, 0.95);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background-color 0.25s, color 0.2s;
+        }
+
+        /* ========================================
+           ÁREA ROLÁVEL PRINCIPAL
+           ======================================== */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            padding-bottom: 84px; /* Liberação para barra de abas inferior */
+        }
+
+        /* ========================================
+           CABEÇALHO DA AGENDA
+           ======================================== */
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .header-title h1 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .header-title p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-test-sound {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--color-gold);
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* ========================================
+           BARRA DE ABAS INFERIOR (Mobile App Style)
+           ======================================== */
+        .tab-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 68px;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            cursor: pointer;
+            width: 33.3%;
+            height: 100%;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--color-gold);
+            font-weight: bold;
+        }
+
+        .tab-icon {
+            font-size: 1.3rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            animation: slideUp 0.2s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========================================
+           LINHA DO TEMPO (TIMELINE)
+           ======================================== */
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .time-block {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .time-block::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+        }
+
+        /* Configuração de Cores por criticidade */
+        .block-green::before { background-color: var(--color-green); }
+        .block-blue::before { background-color: var(--color-blue); }
+        .block-yellow::before { background-color: var(--color-yellow); }
+        .block-orange::before { background-color: var(--color-orange); }
+        .block-purple::before { background-color: var(--color-purple); }
+        .block-red::before { background-color: var(--color-red); }
+
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .block-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .block-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .block-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: bold;
+        }
+
+        .block-alarm-badge {
+            background-color: rgba(251, 191, 36, 0.1);
+            color: var(--color-gold);
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        /* Checklist Interno */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background-color: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .task-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--color-gold);
+            cursor: pointer;
+            margin-top: 1px;
+        }
+
+        /* Painel Opcional de Alarmes Nativo/Híbridos */
+        .block-native-sync {
+            display: flex;
+            gap: 6px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-sync-action {
+            font-size: 0.7rem !important;
+            padding: 6px 10px !important;
+            border-radius: 6px !important;
+            background-color: var(--bg-input) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .btn-sync-action:hover {
+            border-color: var(--color-gold) !important;
+        }
+
+        /* Foto / Anexo do Bloco */
+        .photo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: var(--bg-input);
+            border: 1px dashed var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .photo-preview {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-upload {
+            font-size: 0.75rem;
+            background-color: var(--border-color);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+        }
+
+        /* ========================================
+           INVENTÁRIO E CONTROLE DE ATIVOS
+           ======================================== */
+        .inventory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .inventory-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .inventory-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .inventory-name {
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .inventory-desc {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========================================
+           PAINEL DE ASSINATURA E ENCERRAMENTO
+           ======================================== */
+        .signature-area {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        canvas {
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-input);
+            border-radius: 8px;
+            width: 100%;
+            height: 150px;
+            touch-action: none; /* Previne rolagem ao assinar na tela */
+        }
+
+        .canvas-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        /* ========================================
+           BOTÕES E COMPONENTES GERAIS
+           ======================================== */
+        .btn {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn-gold { background-color: var(--color-gold); color: #000; }
+        .btn-danger { background-color: #3f1a1a; color: #f87171; border: 1px solid #7f1d1d; }
+        .btn-secondary { background-color: var(--border-color); color: var(--text-primary); }
+
+        .report-view {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* ========================================
+           MÓDULO: GUIA DE INSTRUÇÕES DA AGENDA
+           ======================================== */
+        .guide-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-modal);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .guide-overlay.active {
+            display: flex;
+        }
+
+        .guide-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .guide-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .guide-header h2 {
+            font-size: 1rem;
+            color: var(--color-gold);
+        }
+
+        .guide-content {
+            padding: 16px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .guide-content h3 {
+            font-size: 0.85rem;
+            border-left: 3px solid var(--color-gold);
+            padding-left: 6px;
+            margin-bottom: 4px;
+        }
+
+        .guide-content p, .guide-content ul {
+            color: var(--text-primary);
+            margin-left: 4px;
+        }
+
+        .guide-content ul {
+            list-style-type: square;
+            padding-left: 16px;
+        }
+
+        .badge-info {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-right: 4px;
+        }
+
+        /* ========================================
+           RODAPÉ
+           ======================================== */
+        footer {
+            margin-top: 24px;
+            padding: 16px 8px;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.4;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        footer a {
+            color: var(--color-gold);
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================
+         CABEÇALHO FIXO
+         ======================================== -->
+    <header>
+        <div class="header-title">
+            <h1>Ag_IFE 2.0</h1>
+            <p>Agenda do Especialista de Limpeza pós-obra</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn-test-sound" style="border-color: var(--border-color);" onclick="toggleGuide()">📖 Guia de Uso</button>
+            <button class="btn-test-sound" onclick="testSynthAlarm()">🔊 Alarme</button>
+        </div>
+    </header>
+
+    <!-- ========================================
+         ÁREA ROLÁVEL DO CONTEÚDO DA ABA
+         ======================================== -->
+    <main>
+        
+        <!-- ABA 1: LINHA DO TEMPO (TIMELINE) -->
+        <section id="tab-timeline" class="tab-content active">
+            <div class="timeline-container" id="timelineList">
+                <!-- Construído Dinamicamente por Javascript para herdar localStorage -->
+            </div>
+        </section>
+
+        <!-- ABA 2: INVENTÁRIO & ATIVOS -->
+        <section id="tab-inventory" class="tab-content">
+            <div class="report-view">
+                <h3 style="color: var(--color-gold);">📦 Controle de Ativos e Insumos</h3>
+                <p>Marque os equipamentos retirados e checados no almoxarifado antes de se responsabilizar pela guarda.</p>
+            </div>
+            <div class="inventory-list" id="inventoryList">
+                <!-- Preenchido via Javascript -->
+            </div>
+        </section>
+
+        <!-- ABA 3: RELATÓRIO DE ENTREGA & CHECKOUT -->
+        <section id="tab-checkout" class="tab-content">
+            <div class="report-view">
+                <h3 style="color: var(--color-gold);">📊 Auditoria Final Diária</h3>
+                <p>Esta assinatura atesta e assina digitalmente a conformidade das ações, isentando o profissional de avarias de montagem anteriores.</p>
+            </div>
+
+            <!-- Pad de Assinatura -->
+            <div class="signature-area">
+                <h4 style="font-size: 0.85rem;">Assinatura Eletrônica do Especialista</h4>
+                <canvas id="signatureCanvas"></canvas>
+                <div class="canvas-controls">
+                    <button class="btn btn-secondary" onclick="clearSignature()">Limpar Painel</button>
+                    <button class="btn btn-gold" onclick="saveSignatureState()">Salvar Traço</button>
+                </div>
+            </div>
+
+            <div class="report-view">
+                <h3 style="color: var(--color-gold);">📋 Resumo do Diário de Obras</h3>
+                <div id="reportSummary" style="font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px;">
+                    <!-- Gerado dinamicamente -->
+                </div>
+                <button class="btn btn-gold" onclick="exportDailyReportText()">Download do Relatório Técnico</button>
+                <button class="btn btn-danger" style="margin-top: 12px;" onclick="clearAllData()">⚠️ Reiniciar Tudo (Zerar App)</button>
+            </div>
+        </section>
+
+        <!-- ========================================
+             RODAPÉ INTEGRADO AO FLUXO ROLÁVEL (Sempre Visível ao Rolar)
+             ======================================== -->
+        <footer>
+            Carlos Alberto Reis © 2026/2027 · Suporte e Apoio<br>
+            Chave Pix / Fone WhatsApp: <a href="https://wa.me/5561999487649" target="_blank">61999487649</a>
+        </footer>
+  
+    </main>
+
+    <!-- ========================================
+         MÓDULO: GUIA DE INSTRUÇÕES (RETRACTABLE)
+         ======================================== -->
+    <div class="guide-overlay" id="guideOverlay" onclick="toggleGuide()">
+        <div class="guide-container" onclick="event.stopPropagation()">
+            <div class="guide-header">
+                <h2>📖 Guia de Uso Inteligente</h2>
+                <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.7rem;" onclick="toggleGuide()">Fechar ✕</button>
+            </div>
+            <div class="guide-content">
+                <div>
+                    <h3>1. Linha do Tempo e Código de Cores</h3>
+                    <p>Cada tarefa diária possui uma cor de criticidade para mapeamento de riscos pós-obra:</p>
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li><span class="badge-info" style="background-color: var(--color-green); color:#fff">🟢 Verde</span> Preparação e análise de FISPQ químico.</li>
+                        <li><span class="badge-info" style="background-color: var(--color-blue); color:#fff">🔵 Azul</span> Limpeza técnica de superfícies nobres.</li>
+                        <li><span class="badge-info" style="background-color: var(--color-yellow); color:#000">🟡 Amarelo</span> Pausa ergonômica essencial.</li>
+                        <li><span class="badge-info" style="background-color: var(--color-orange); color:#fff">🟠 Laranja</span> Polimento fino e acabamento estético.</li>
+                        <li><span class="badge-info" style="background-color: var(--color-purple); color:#fff">🟣 Roxo</span> Guarda e manutenção de maquinários.</li>
+                        <li><span class="badge-info" style="background-color: var(--color-red); color:#fff">🔴 Vermelho</span> Auditoria final e checkout de assinatura.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3>2. Comprovantes e Fotos de Campo</h3>
+                    <p>O aplicativo permite capturar fotos reais dos andares (como riscos deixados antes da sua limpeza começar). Toque em <strong>"Carregar Imagem"</strong> dentro de cada bloco para gerar uma comprovação legal de segurança.</p>
+                </div>
+
+                <div>
+                    <h3>3. Segurança no GitHub e Modo Offline</h3>
+                    <p>Todos os dados inseridos (assinaturas, fotos, notas) são salvos de forma independente e local na memória do navegador do seu celular (`localStorage`). O aplicativo não envia nada para a internet, garantindo sigilo absoluto de obras residenciais de alto padrão.</p>
+                </div>
+
+                <div>
+                    <h3>4. ⚠️ Protocolo de Alarme Seguro e Prevenção de Danos</h3>
+                    <p>O navegador do celular entra em modo de economia profunda ao desligar a tela, o que suspende cronômetros JavaScript. Para **processos químicos críticos** (como ácidos agindo em mármores):</p>
+                    <ul>
+                        <li>Use a opção <strong>"📅 Sinc. Calendário"</strong> para gerar um arquivo de calendário nativo que programará um despertador robusto no processador do sistema operacional do seu celular.</li>
+                        <li>Em celulares compatíveis, use a opção <strong>"⏰ Despertador"</strong> para abrir diretamente a configuração nativa de alarmes do seu aparelho.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <!-- ========================================
+         NAVEGAÇÃO DE ABAS INFERIOR
+         ======================================== -->
+    <nav class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('tab-timeline', this)">
+            <span class="tab-icon">🕒</span>
+            <span>Linha do Tempo</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('tab-inventory', this)">
+            <span class="tab-icon">📦</span>
+            <span>Ativos & FISPQ</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('tab-checkout', this)">
+            <span class="tab-icon">✍️</span>
+            <span>Relatório</span>
+        </button>
+    </nav>
+
+    <!-- ========================================
+         LÓGICA E ENGENHARIA DE DADOS JS
+         ======================================== -->
+    <script>
+        // ========================================
+        // ESTRUTURA DE ESTADO PADRÃO (Ag_IFE v1)
+        // ========================================
+        let appState = {
+            signed: false,
+            signatureData: null,
+            inventory: [
+                { id: "inv_1", name: "Politriz Rotativa Bosch 1200W", desc: "Verificar integridade do disco de feltro mole.", checked: false },
+                { id: "inv_2", name: "Aspirador de Micropartículas HEPA", desc: "Checar se o saco coletor está vazio.", checked: false },
+                { id: "inv_3", name: "Detergente de Ph Neutro (Bellinzoni)", desc: "Comprovação de FISPQ para mármore.", checked: false },
+                { id: "inv_4", name: "Feltros e Panos de Microfibra de 400g/m²", desc: "Zerar qualquer micro-abrasivo na área.", checked: false }
+            ],
+            blocks: [
+                {
+                    id: "block_1",
+                    title: "Preparação, Segurança e FISPQ",
+                    time: "07:00 - 08:30",
+                    colorClass: "block-green",
+                    alarmTime: "07:30",
+                    alarmTriggered: false,
+                    tasks: [
+                        { text: "Check-in via geolocalização na entrada do canteiro", checked: false },
+                        { text: "Validação do uso de sapato que não deixa rastro preto", checked: false },
+                        { text: "Checagem das FISPQ dos solventes do dia", checked: false }
+                    ],
+                    photoData: null,
+                    notes: ""
+                },
+                {
+                    id: "block_2",
+                    title: "Limpeza Técnica Crítica",
+                    time: "08:30 - 12:00",
+                    colorClass: "block-blue",
+                    alarmTime: "10:00",
+                    alarmTriggered: false,
+                    tasks: [
+                        { text: "Fotografar quaisquer riscos deixados por equipes anteriores", checked: false },
+                        { text: "Executar 'Spot Test' (área oculta) antes da lavagem de pedras", checked: false },
+                        { text: "Limpeza do vidro termoacústico com raspador zero-risco", checked: false }
+                    ],
+                    photoData: null,
+                    notes: ""
+                },
+                {
+                    id: "block_3",
+                    title: "Intervalo Ergonômico",
+                    time: "12:00 - 13:00",
+                    colorClass: "block-yellow",
+                    alarmTime: "12:50",
+                    alarmTriggered: false,
+                    tasks: [
+                        { text: "Retirada de EPIs de alto risco", checked: false },
+                        { text: "Pausa alimentar e hidratação preventiva", checked: false }
+                    ],
+                    photoData: null,
+                    notes: ""
+                },
+                {
+                    id: "block_4",
+                    title: "Acabamento Fino e Polimento",
+                    time: "13:00 - 16:30",
+                    colorClass: "block-orange",
+                    alarmTime: "14:30",
+                    alarmTriggered: false,
+                    tasks: [
+                        { text: "Aspiração total de pó flutuante com filtro de carvão HEPA", checked: false },
+                        { text: "Polimento de inox e metais escovados com pano seco", checked: false },
+                        { text: "Inspeção de reflexo e poeira com lanterna de alta potência", checked: false }
+                    ],
+                    photoData: null,
+                    notes: ""
+                },
+                {
+                    id: "block_5",
+                    title: "Patrimônio & Equipamentos",
+                    time: "16:30 - 17:30",
+                    colorClass: "block-purple",
+                    alarmTime: "17:00",
+                    alarmTriggered: false,
+                    tasks: [
+                        { text: "Lavagem de mangueiras e reservatórios das extratoras", checked: false },
+                        { text: "Acondicionar produtos químicos sob tranca de segurança", checked: false },
+                        { text: "Contagem física de panos e discos abrasivos", checked: false }
+                    ],
+                    photoData: null,
+                    notes: ""
+                },
+                {
+                    id: "block_6",
+                    title: "Encerramento e Assinatura Legal",
+                    time: "17:30 - 18:00",
+                    colorClass: "block-red",
+                    alarmTime: "17:50",
+                    alarmTriggered: false,
+                    tasks: [
+                        { text: "Criação de relatório de 'antes e depois' para o proprietário", checked: false },
+                        { text: "Checkout e fechamento de portões", checked: false }
+                    ],
+                    photoData: null,
+                    notes: ""
+                }
+            ]
+        };
+
+        // Detecta se o sistema operacional é iOS (iPad, iPhone, iPod)
+        function isIOS() {
+            return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        }
+
+        // ========================================
+        // GERENCIADOR DE ÁUDIO WEB SINTETIZADO (Alarme offline robusto)
+        // ========================================
+        function triggerBeepAlarm() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                
+                const ctx = new AudioCtx();
+                
+                // Beep triplo ritmado de alta engenharia
+                const playBeep = (time, freq, duration) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(freq, time);
+                    
+                    gain.gain.setValueAtTime(0, time);
+                    gain.gain.linearRampToValueAtTime(0.4, time + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.01, time + duration);
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc.start(time);
+                    osc.stop(time + duration);
+                };
+
+                const now = ctx.currentTime;
+                playBeep(now, 880, 0.3);       // Alerta 1
+                playBeep(now + 0.4, 880, 0.3); // Alerta 2
+                playBeep(now + 0.8, 1200, 0.5); // Alerta 3 (Mais agudo para atenção)
+                
+            } catch (err) {
+                console.warn("Som bloqueado pelo navegador até o usuário clicar na tela.", err);
+            }
+        }
+
+        function testSynthAlarm() {
+            triggerBeepAlarm();
+            alert("🔊 Alarme Sintetizado Ag_IFE disparado com sucesso!");
+        }
+
+        // ========================================
+        // INICIALIZAÇÃO E CARREGAMENTO
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            renderTimeline();
+            renderInventory();
+            initSignaturePad();
+            startClockCheck();
+        });
+
+        // ========================================
+        // EXIBIÇÃO / OCULTAÇÃO DO GUIA DE INSTRUÇÃO
+        // ========================================
+        function toggleGuide() {
+            const overlay = document.getElementById('guideOverlay');
+            overlay.classList.toggle('active');
+        }
+
+        // ========================================
+        // NAVEGAÇÃO DE ABAS
+        // ========================================
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+
+            if (tabId === 'tab-checkout') {
+                updateReportSummary();
+                resizeCanvas();
+            }
+        }
+
+        // ========================================
+        // LINHA DO TEMPO (CONSTRUÇÃO DINÂMICA)
+        // ========================================
+        function renderTimeline() {
+            const container = document.getElementById('timelineList');
+            container.innerHTML = '';
+
+            const isAppleDevice = isIOS();
+
+            appState.blocks.forEach((block, bIdx) => {
+                const blockDiv = document.createElement('div');
+                blockDiv.className = `time-block ${block.colorClass}`;
+
+                // Lista de Checkboxes
+                let tasksHtml = '';
+                block.tasks.forEach((task, tIdx) => {
+                    tasksHtml += `
+                        <label class="task-item">
+                            <input type="checkbox" ${task.checked ? 'checked' : ''} onchange="toggleTask(${bIdx}, ${tIdx})">
+                            <span>${escapeHtml(task.text)}</span>
+                        </label>
+                    `;
+                });
+
+                // Área de Foto com visualizador offline em Base64
+                const photoSrcHtml = block.photoData ? `<img src="${block.photoData}">` : '📷';
+
+                // Botão do despertador nativo (ocultado no iOS)
+                const androidAlarmButton = !isAppleDevice ? 
+                    `<button class="btn btn-sync-action" onclick="launchAndroidAlarm(${bIdx})" title="Configurar alarme nativo no Android">⏰ Despertador (Android)</button>` : '';
+
+                blockDiv.innerHTML = `
+                    <div class="block-header">
+                        <div class="block-meta">
+                            <span class="block-title">${escapeHtml(block.title)}</span>
+                            <span class="block-time">🕒 Horário: ${block.time}</span>
+                        </div>
+                        <span class="block-alarm-badge">🔔 Alerta: ${block.alarmTime}</span>
+                    </div>
+
+                    <div class="task-list">
+                        <strong style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Checklist de Campo:</strong>
+                        ${tasksHtml}
+                    </div>
+
+                    <div class="block-native-sync">
+                        <strong style="font-size:0.7rem; color:var(--text-secondary); width:100%; text-transform:uppercase; margin-bottom:2px;">Prevenção (Despertador Físico Opcional):</strong>
+                        <button class="btn btn-sync-action" onclick="downloadIcalEvent(${bIdx})" title="Adicionar lembrete no calendário do celular">📅 Agenda Celular (iCal)</button>
+                        ${androidAlarmButton}
+                    </div>
+
+                    <div class="photo-area">
+                        <div class="photo-preview" id="preview-${block.id}">
+                            ${photoSrcHtml}
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:4px; flex:1;">
+                            <span style="font-size:0.7rem; color:var(--text-secondary); font-weight:bold;">Registro Fotográfico (Controle de Danos)</span>
+                            <label class="btn-upload" style="align-self: flex-start;">
+                                Carregar Imagem
+                                <input type="file" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event, ${bIdx})">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="display: flex; flex-direction:column; gap:4px;">
+                        <label style="font-size:0.7rem; color:var(--text-secondary); font-weight:bold; text-transform:uppercase;">Anotações de Ocorrência:</label>
+                        <input type="text" class="in-desc" value="${escapeHtml(block.notes)}" placeholder="Ex: Risco encontrado no vidro..." oninput="updateNotes(${bIdx}, this.value)" style="background-color: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); padding:8px; border-radius:6px; font-size:0.8rem; outline:none; font-family: var(--font-family);">
+                    </div>
+                `;
+
+                container.appendChild(blockDiv);
+            });
+        }
+
+        // ========================================
+        // ENGENHARIA DE EXPORTAÇÃO DE ALARMES NATIVOS (OPCIONAL)
+        // ========================================
+        function downloadIcalEvent(bIdx) {
+            const block = appState.blocks[bIdx];
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            
+            // Extrai hora e minuto do alarme configurado
+            const [hour, minute] = block.alarmTime.split(':');
+            const startStr = `${year}${month}${day}T${hour}${minute}00`;
+            const endStr = `${year}${month}${day}T${hour}${String(parseInt(minute) + 15).padStart(2, '0')}00`; // Bloco estimado em 15 minutos
+
+            // String estruturada RFC 5545 para iCalendar
+            const icsContent = [
+                "BEGIN:VCALENDAR",
+                "VERSION:2.0",
+                "PRODID:-//Ag_IFE//Smart Agenda Pós-Obra//BR",
+                "BEGIN:VEVENT",
+                `UID:event_${block.id}_${Date.now()}@ag_ife.app`,
+                `DTSTAMP:${year}${month}${day}T000000Z`,
+                `DTSTART:${startStr}`,
+                `DTEND:${endStr}`,
+                `SUMMARY:Ag_IFE: ${block.title}`,
+                `DESCRIPTION:Ação crítica de engenharia pós-obra. Valide os checklists no app.`,
+                "BEGIN:VALARM",
+                "TRIGGER:-PT0M", // Dispara exatamente na hora do início do evento
+                "ACTION:DISPLAY",
+                "DESCRIPTION:Lembrete de Alerta Crítico Ag_IFE",
+                "END:VALARM",
+                "END:VEVENT",
+                "END:VCALENDAR"
+            ].join("\r\n");
+
+            // Cria blob de download offline sem dependência de internet externa
+            const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.href = url;
+            downloadAnchor.download = `Alerta_Ag_IFE_${block.id}.ics`;
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            document.body.removeChild(downloadAnchor);
+            URL.revokeObjectURL(url);
+        }
+
+        function launchAndroidAlarm(bIdx) {
+            const block = appState.blocks[bIdx];
+            const [hour, minute] = block.alarmTime.split(':');
+            const message = encodeURIComponent(`Ag_IFE: ${block.title}`);
+            
+            // Intent URL para acionar o despertador do Android com horário pré-carregado
+            const intentUrl = `intent:#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR=${parseInt(hour)};i.android.intent.extra.alarm.MINUTES=${parseInt(minute)};S.android.intent.extra.alarm.MESSAGE=${message};S.android.intent.extra.alarm.SKIP_UI=false;end`;
+            window.location.href = intentUrl;
+        }
+
+        // ========================================
+        // CONTROLES DE CHECKLIST & FOTO
+        // ========================================
+        function toggleTask(bIdx, tIdx) {
+            appState.blocks[bIdx].tasks[tIdx].checked = !appState.blocks[bIdx].tasks[tIdx].checked;
+            saveStateToStorage();
+        }
+
+        function updateNotes(bIdx, text) {
+            appState.blocks[bIdx].notes = text;
+            saveStateToStorage();
+        }
+
+        function handlePhotoUpload(event, bIdx) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                appState.blocks[bIdx].photoData = base64;
+                saveStateToStorage();
+                
+                // Atualiza visualizador local na hora
+                const preview = document.getElementById(`preview-${appState.blocks[bIdx].id}`);
+                preview.innerHTML = `<img src="${base64}">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ========================================
+        // ABA INVENTÁRIO
+        // ========================================
+        function renderInventory() {
+            const container = document.getElementById('inventoryList');
+            container.innerHTML = '';
+
+            appState.inventory.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'inventory-card';
+
+                div.innerHTML = `
+                    <div class="inventory-info">
+                        <span class="inventory-name">${escapeHtml(item.name)}</span>
+                        <span class="inventory-desc">${escapeHtml(item.desc)}</span>
+                    </div>
+                    <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleInventory(${idx})" style="width:18px; height:18px; accent-color:var(--color-gold); cursor:pointer;">
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function toggleInventory(idx) {
+            appState.inventory[idx].checked = !appState.inventory[idx].checked;
+            saveStateToStorage();
+        }
+
+        // ========================================
+        // ENGINE DE RELÓGIO E DISPARO DE ALERTAS
+        // ========================================
+        function startClockCheck() {
+            setInterval(() => {
+                const now = new Date();
+                const curTimeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                
+                appState.blocks.forEach(block => {
+                    if (block.alarmTime === curTimeStr && !block.alarmTriggered) {
+                        block.alarmTriggered = true;
+                        triggerBeepAlarm();
+                        saveStateToStorage();
+                        alert(`🔔 ALARME DE CRITICIDADE - Ag_IFE:\n\nHora: ${block.alarmTime}\nBloco: ${block.title}\n\nVerifique as obrigações deste período.`);
+                    }
+                    
+                    // Reseta gatilho se o horário já passou para rearmar pro próximo dia
+                    if (curTimeStr === "00:00") {
+                        block.alarmTriggered = false;
+                    }
+                });
+            }, 30000); // Roda a cada 30 segundos
+        }
+
+        // ========================================
+        // CANVAS: PAD DE ASSINATURA ELETRÔNICA
+        // ========================================
+        let canvas, ctx, isDrawing = false;
+
+        function initSignaturePad() {
+            canvas = document.getElementById('signatureCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // Tratamento de desenho por toque e mouse
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw);
+            canvas.addEventListener('mouseleave', stopDraw);
+
+            canvas.addEventListener('touchstart', startDrawTouch, {passive: false});
+            canvas.addEventListener('touchmove', drawTouch, {passive: false});
+            canvas.addEventListener('touchend', stopDraw);
+
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Recupera assinatura anterior se existir
+            if (appState.signatureData) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = appState.signatureData;
+            }
+        }
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            // Mantém os pixels internos alinhados com o layout CSS do celular
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            
+            // Re-renderiza o traço após o redimensionamento se houver
+            if (appState.signatureData) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = appState.signatureData;
+            } else {
+                clearSignature();
+            }
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+
+        function getTouchPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: e.touches[0].clientX - rect.left,
+                y: e.touches[0].top
+            };
+        }
+
+        function startDraw(e) {
+            isDrawing = true;
+            const pos = getMousePos(e);
+            ctx.beginPath();
+            ctx.strokeStyle = '#fbbf24'; // Dourado
+            ctx.lineWidth = 2;
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getMousePos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function startDrawTouch(e) {
+            e.preventDefault();
+            isDrawing = true;
+            const pos = getTouchPos(e);
+            ctx.beginPath();
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function drawTouch(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const pos = getTouchPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDraw() {
+            isDrawing = false;
+        }
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            appState.signatureData = null;
+            appState.signed = false;
+            saveStateToStorage();
+        }
+
+        function saveSignatureState() {
+            appState.signatureData = canvas.toDataURL();
+            appState.signed = true;
+            saveStateToStorage();
+            updateReportSummary();
+            alert("✅ Traço da assinatura eletrônica salvo com sucesso!");
+        }
+
+        // ========================================
+        // GERADOR DE RELATÓRIO TÉCNICO DIÁRIO
+        // ========================================
+        function updateReportSummary() {
+            const summary = document.getElementById('reportSummary');
+            let tasksCompleted = 0;
+            let tasksTotal = 0;
+
+            appState.blocks.forEach(b => {
+                b.tasks.forEach(t => {
+                    tasksTotal++;
+                    if (t.checked) tasksCompleted++;
+                });
+            });
+
+            let activeEquipments = appState.inventory.filter(i => i.checked).map(i => i.name).join(', ') || 'Nenhum ativado';
+
+            let occurrencesText = '';
+            appState.blocks.forEach(b => {
+                if (b.notes) {
+                    occurrencesText += `\n* Block: ${b.title}: ${b.notes}`;
+                }
+            });
+
+            summary.innerHTML = `
+DIÁRIO DE OBRAS TECNICO - FCI/Ag_IFE
+-----------------------------------------
+Data da Auditoria: ${new Date().toLocaleDateString('pt-BR')}
+Executante: Especialista em Entrega de Obras
+Aproveitamento: ${tasksCompleted} de ${tasksTotal} tarefas executadas.
+Equipamentos Ativos: ${activeEquipments}
+Ocorrências em Campo: ${occurrencesText || 'Nenhuma anormalidade registrada.'}
+Assinatura Digital Ativa: ${appState.signed ? 'CONFORMIDADE ASSINADA' : 'PENDENTE DE TRAÇO'}
+-----------------------------------------
+            `;
+        }
+
+        function exportDailyReportText() {
+            updateReportSummary();
+            const text = document.getElementById('reportSummary').textContent;
+            
+            try {
+                const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(text);
+                const downloadAnchor = document.createElement('a');
+                downloadAnchor.setAttribute("href", dataStr);
+                downloadAnchor.setAttribute("download", `Ag_IFE_Relatorio_Diario_${Date.now()}.txt`);
+                document.body.appendChild(downloadAnchor);
+                downloadAnchor.click();
+                downloadAnchor.remove();
+            } catch (err) {
+                alert("Erro ao exportar arquivo de texto.");
+            }
+        }
+
+        // ========================================
+        // PERSISTÊNCIA DE DADOS (LOCAL STORAGE)
+        // ========================================
+        function saveStateToStorage() {
+            localStorage.setItem('ag_ife_data_v1', JSON.stringify(appState));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('ag_ife_data_v1');
+            if (saved) {
+                try {
+                    appState = JSON.parse(saved);
+                } catch(e) {
+                    saveStateToStorage();
+                }
+            } else {
+                saveStateToStorage();
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ ALERTA EXTREMO:\n\nIsso apagará permanentemente todas as imagens anexadas, assinaturas, anotações de ocorrência e checklists efetuados hoje.\n\nDeseja realizar esta limpeza geral?')) {
+                localStorage.removeItem('ag_ife_data_v1');
+                location.reload();
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
