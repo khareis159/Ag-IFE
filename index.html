@@ -856,6 +856,84 @@
         }
 
         // ========================================
+        // COMPONENTES AUXILIARES DE ASSINATURA (Definidos no topo para evitar ReferenceError)
+        // ========================================
+        let canvas, ctx, isDrawing = false;
+
+        function clearSignature() {
+            if (!canvas || !ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            appState.signatureData = null;
+            appState.signed = false;
+            saveStateToStorage();
+        }
+
+        function saveSignatureState() {
+            if (!canvas) return;
+            appState.signatureData = canvas.toDataURL();
+            appState.signed = true;
+            saveStateToStorage();
+            updateReportSummary();
+            alert("✅ Traço da assinatura eletrônica salvo com sucesso!");
+        }
+
+        function getMousePos(e) {
+            if (!canvas) return { x: 0, y: 0 };
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+
+        function getTouchPos(e) {
+            if (!canvas || !e.touches || e.touches.length === 0) return { x: 0, y: 0 };
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: e.touches[0].clientX - rect.left,
+                y: e.touches[0].clientY - rect.top // CORREÇÃO: Mapeamento de coordenadas físicas corrigido de .top para .clientY
+            };
+        }
+
+        function startDraw(e) {
+            isDrawing = true;
+            const pos = getMousePos(e);
+            ctx.beginPath();
+            ctx.strokeStyle = '#fbbf24'; 
+            ctx.lineWidth = 2;
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getMousePos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function startDrawTouch(e) {
+            e.preventDefault();
+            isDrawing = true;
+            const pos = getTouchPos(e);
+            ctx.beginPath();
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function drawTouch(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const pos = getTouchPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDraw() {
+            isDrawing = false;
+        }
+
+        // ========================================
         // GERENCIADOR DE ÁUDIO WEB SINTETIZADO
         // ========================================
         function triggerBeepAlarm() {
@@ -1062,7 +1140,8 @@
             const block = appState.blocks[bIdx];
             const [hour, minute] = block.alarmTime.split(':');
             const message = encodeURIComponent(`Ag_IFE: ${block.title}`);
-            const intentUrl = `intent:#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR=${parseInt(hour)};i.android.intent.extra.alarm.MINUTES=${parseInt(minute)};S.android.intent.extra.alarm.MESSAGE=${message};S.android.intent.extra.alarm.SKIP_UI=false;end`;
+            // CORREÇÃO: Adicionado o delimitador "//" após o protocolo intent para compatibilidade com Chrome/Samsung Internet
+            const intentUrl = `intent://#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR=${parseInt(hour)};i.android.intent.extra.alarm.MINUTES=${parseInt(minute)};S.android.intent.extra.alarm.MESSAGE=${message};S.android.intent.extra.alarm.SKIP_UI=false;end`;
             window.location.href = intentUrl;
         }
 
@@ -1194,7 +1273,6 @@
             alert("✅ Bloco de Rotina adicionado com sucesso!");
         }
 
-        // REMOÇÃO SEGURA DE BLOCOS DA LISTA
         function removeBlock(bIdx) {
             if (confirm("Deseja mesmo excluir esta rotina inteira e suas tarefas associadas?")) {
                 appState.blocks.splice(bIdx, 1);
@@ -1282,8 +1360,6 @@
         // ========================================
         // CANVAS: PAD DE ASSINATURA ELETRÔNICA
         // ========================================
-        let canvas, ctx, isDrawing = false;
-
         function initSignaturePad() {
             canvas = document.getElementById('signatureCanvas');
             ctx = canvas.getContext('2d');
@@ -1323,60 +1399,6 @@
             } else {
                 clearSignature();
             }
-        }
-
-        function getMousePos(e) {
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
-            };
-        }
-
-        function getTouchPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: e.touches[0].clientX - rect.left,
-                y: e.touches[0].clientY - rect.top
-            };
-        }
-
-        function startDraw(e) {
-            isDrawing = true;
-            const pos = getMousePos(e);
-            ctx.beginPath();
-            ctx.strokeStyle = '#fbbf24'; 
-            ctx.lineWidth = 2;
-            ctx.moveTo(pos.x, pos.y);
-        }
-
-        function draw(e) {
-            if (!isDrawing) return;
-            const pos = getMousePos(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-        }
-
-        function startDrawTouch(e) {
-            e.preventDefault();
-            isDrawing = true;
-            const pos = getTouchPos(e);
-            ctx.beginPath();
-            ctx.strokeStyle = '#fbbf24';
-            ctx.lineWidth = 2;
-            ctx.moveTo(pos.x, pos.y);
-        }
-
-        function drawTouch(e) {
-            e.preventDefault();
-            if (!isDrawing) return;
-            const pos = getTouchPos(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-        }
-
-        function stopDraw() {
-            isDrawing = false;
         }
 
         // ========================================
